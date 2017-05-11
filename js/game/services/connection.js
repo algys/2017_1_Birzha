@@ -50,7 +50,7 @@ class Connection {
     }
 
     static parseHost(ip) {
-        return "ws://" + ip.host + ":" + ip.port + ip.path;
+        return "wss://" + ip.host + ":" + ip.port + ip.path;
     }
 }
 
