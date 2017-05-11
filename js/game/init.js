@@ -37,7 +37,7 @@ window.conf = {
           {host: "172.16.90.2", port: 8081, path: "/game"},
           {host: "172.20.10.3", port: 8081, path: "/game"},
           {host: "localhost", port: 8081, path: "/game"},
-          {host: "cyclic-server.herokuapp.com", port: 80, path: "/game"}
+          {host: "https://cyclic-server.herokuapp.com", port: 80, path: "/game"}
     ],
     baseIP: 5,
 
