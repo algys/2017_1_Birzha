@@ -21,7 +21,6 @@ window.DATATYPE_ROOM_DESTRUCT= 6;
 window.READY_FOR_ROOM_SEARCH = 1;
 window.READY_FOR_GAME_START = 2;
 window.GAME_UPDATE_MY_MOVE = 3;
-window.GAME_ACCEPT_MY_MOVE = 4;
 
 window.RES_OK = 0;
 window.RES_ROLLBACK = 1;
@@ -35,11 +34,12 @@ window.conf = {
     ip: [ {host: "172.16.83.124", port: 8081, path: "/game "},
           {host: "192.168.43.107", port: 8081, path: "/game"},
           {host: "172.16.90.2", port: 8081, path: "/game"},
-          {host: "172.20.10.3", port: 8081, path: "/game"},
+          {host: "172.16.94.65", port: 8081, path: "/game"},
           {host: "localhost", port: 8081, path: "/game"},
-          {host: "cyclic-server.herokuapp.com", port: "", path: "/game"}
+          {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
+          {host: "172.16.94.65", port: 8081, path: "/game"}
     ],
-    baseIP: 5,
+    baseIP: 3,
 
     countUsersInRoom: 2,
 

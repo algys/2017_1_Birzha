@@ -56,7 +56,7 @@ class UserInterface {
             this.probablyLine.graphics.endStroke();
         } else if(this.currentMode === 'choosing') {
             if(this.world.arrayMap[cellPos.x][cellPos.y]) {
-                if (this.world.arrayMap[cellPos.x][cellPos.y].data.client_id !== this.packCallback['getClientId']()) {
+                if (this.world.arrayMap[cellPos.x][cellPos.y].client_id !== this.packCallback['getClientId']()) {
                     this.world.area.markCurrentCell(cellPos.x, cellPos.y, 1);
                 }
                 this.world.area.markCurrentCell(cellPos.x, cellPos.y, 0);
@@ -94,7 +94,7 @@ class UserInterface {
         let newPos = this.world.area.getCellPosition(newX, newY);
         let i = this.packCallback['getClientId']();
         if(this.world.arrayMap[newPos.x][newPos.y]) {
-            if (this.world.arrayMap[newPos.x][newPos.y].data.client_id !== this.packCallback['getClientId']()) {
+            if (this.world.arrayMap[newPos.x][newPos.y].client_id !== this.packCallback['getClientId']()) {
                 return;
             }
         } else

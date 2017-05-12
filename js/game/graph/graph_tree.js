@@ -87,7 +87,6 @@ class GraphTree {
     }
 
     drawWireBetweenTowers(to, from, anim) {
-        debugger;
         to = this.world.area.getPixelPoint(to.x, to.y);
         from = this.world.area.getPixelPoint(from.x, from.y);
         let x = to.x, y = to.y;

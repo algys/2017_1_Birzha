@@ -123,7 +123,7 @@ class World {
     }
 
     setZoom(zoom){
-        debugger;
+        ;
         this.map.scaleX = this.map.scaleY = zoom;
         this.area.world.scaleX = this.area.world.scaleY = zoom;
      //   this.stage.canvas.style.zoom = zoom;
@@ -138,6 +138,9 @@ class World {
         this.area.zoom = zoom;
     }
 
+    addTowerToMap(point, tower) {
+        this.arrayMap[point.x][point.y] = tower;
+    }
 }
 
 export default World;

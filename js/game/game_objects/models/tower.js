@@ -1,5 +1,5 @@
 class Tower {
-    constructor(world, pointX, pointY, typeOfTower, units, clientId, nick) {
+    constructor(world, pointX, pointY, typeOfTower, units) {
         this.world = world;
         this.pointX = pointX; // TODO to normal
         this.pointY = pointY;
@@ -13,7 +13,16 @@ class Tower {
 
         this.units = units;
 
+        this._parentNode = null;
         this._client_id = null;
+    }
+
+    get parentNode() {
+        return this._parentNode;
+    }
+
+    set parentNode(value) {
+        this._parentNode = value;
     }
 
     get client_id() {
@@ -36,7 +45,7 @@ class Tower {
     }
 
     setPerforming(flag) {
-        // debugger;
+        // ;
 
         if(this.cache == null)
             return;

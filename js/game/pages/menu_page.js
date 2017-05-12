@@ -34,9 +34,9 @@ class MenuPage extends BasePage {
         this.world.update();
         this.world.area.world.stage.update();
 
-        debugger;
+        ;
         this.buttonAnimate = function(event){
-        //    debugger;
+        //    ;
             this.buttonMenu.rotation += 2;
             this.world.update();
         };
@@ -56,7 +56,7 @@ class MenuPage extends BasePage {
     }
 
     setEnableRotation(flag) {
-    //    debugger;
+    //    ;
         if(flag && !createjs.Ticker.hasEventListener("tick")) {
             createjs.Ticker.addEventListener("tick", this.buttonAnimate.bind(this));
             createjs.Ticker.setInterval(10);

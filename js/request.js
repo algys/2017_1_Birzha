@@ -29,7 +29,7 @@ const ALLOWED_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
 class Request {
     constructor(server) {
         this.server = server;
-debugger;
+;
         this.funcs = [];
 
         this.baseCatch = function (error) {
@@ -56,7 +56,7 @@ debugger;
 
     request(path, data) {
         data = data || {};
-debugger;
+
         if(!(data['method'] && (data['method'] in ALLOWED_METHODS)))
             data['method'] = data['method'] || 'GET';
 

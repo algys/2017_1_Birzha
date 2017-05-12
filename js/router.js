@@ -49,7 +49,7 @@ class Router {
             return false;
 
         if (!view) {
-            debugger;
+            ;
             view = this.routes['/'];
             location.pathname = '/';
             path = '/';
@@ -73,10 +73,10 @@ class Router {
     }
 
     startPage(url){
-        debugger;
+        ;
         let view = this._getViewByRoute(url);
         if (!view) {
-            debugger;
+            ;
             view = this.routes['/'];
             location.pathname = '/';
             url = '/';

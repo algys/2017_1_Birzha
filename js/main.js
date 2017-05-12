@@ -82,7 +82,7 @@ import serviceWorkerLoader from '../worker_loader';
         document.cookie = updatedCookie;
     }
 
-    debugger;
+    ;
     if(getCookie('logged')==='true'){
         console.log("Already login !");
         router.register('/', menuView);
@@ -206,7 +206,7 @@ import serviceWorkerLoader from '../worker_loader';
     menu.appendChild(menuForm.el);
 
     let btnLogout = document.getElementById("logoutPressed");
-    debugger;
+    ;
     btnLogout.onclick = (event)=>{
         event.preventDefault();
         setCookie('logged', 'false');
@@ -227,7 +227,7 @@ import serviceWorkerLoader from '../worker_loader';
 
         auth.auth(loginData,
             ()=>{
-            debugger;
+            ;
                 auth.getMe(
                     (user)=>{
                         console.log("Success login !");

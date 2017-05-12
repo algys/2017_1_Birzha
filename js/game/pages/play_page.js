@@ -71,7 +71,8 @@ class PlayPage extends BasePage {
                 let y = item.y;
                 let value = item.value;
 
-                let bonus = new Tower(this.world, x, y, towerType.BONUS, value);
+                let bonus = new Tower(this.world, x, y, towerType.BONUS, value, null);
+                this.world.addTowerToMap({x: x, y: y}, bonus);
                 bonus.draw();
             });
         });
@@ -83,8 +84,7 @@ class PlayPage extends BasePage {
         controls.scoreBoard.addPlayerToScoreBoard("Daniyar", 15352);
 
         this.connection.addEventListen(DATATYPE_PLAYERMOVE, (json) => {
-            debugger;
-            if(json["move"]["type"] !== 1)
+            if(json["move"]["type"] !== "ACCEPT_OK") // TODO make fight
                 return;
 
             this.nowPerforming.setPerforming(false);
@@ -109,7 +109,6 @@ class PlayPage extends BasePage {
         });
 
         this.connection.addEventListen(DATATYPE_ROOM_DESTRUCT, (json) => {
-            debugger;
             alert("Room is destructed !");
             this.stopPage();
         });
