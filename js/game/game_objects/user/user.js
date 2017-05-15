@@ -78,13 +78,19 @@ class User extends GameObject {
 
     playerMoveBonus(fromNode, bonusTower, unitsCount) {
         fromNode.data.units -= unitsCount;
-        let newUnits = bonusTower.units() + unitsCount;
+        let newUnits = bonusTower.units + unitsCount;
 
-        let tower = this.generateMyTower(bonusTower.point, newUnits);
-        this.world.addTowerToMap(bonusTower.point, tower);
+        /* make from bonus to user */
+        bonusTower.refreshTower(towerType.DEFAULT, newUnits, fromNode.parentNode, fromNode.client_id);
+        /***************************/
 
-        let newNode = this.myGraph.addNewVertexToCurrent(tower);
-        this.setTowerNode(tower, newNode);
+        this.world.addTowerToMap(bonusTower.point, bonusTower);
+
+        /* action */
+        this.userAction.createTown(fromNode.data.point, bonusTower.point, unitsCount);
+
+        let newNode = this.myGraph.addNewVertexToCurrent(bonusTower);
+        this.setTowerNode(bonusTower, newNode);
         return newNode;
     }
 
@@ -110,7 +116,7 @@ class User extends GameObject {
                 this.playerMoveFight(this.currentNode, placeTower.parentNode, units);
             } else {
                 let units = parseInt(this.currentNode.data.units / 2); // TODO normal count
-                this.playerMoveBonus(this.currentNode, placeTower, units);
+                this.currentNode = this.playerMoveBonus(this.currentNode, placeTower, units);
             }
         }
 
@@ -144,6 +150,7 @@ class User extends GameObject {
 
     drawObject() {
         this.myGraph.showNodes();
+        this.world.update();
     }
 
     generateMyTower(point, units) {

@@ -17,6 +17,18 @@ class Tower {
         this._client_id = null;
     }
 
+    refreshTower(towerType, newUnits, parentNode, client_id) {
+        this.world.map.removeChild(this.cache.circle);
+        this.world.map.removeChild(this.cache.text);
+
+        this.cache = null; // TODO maybe some remove?
+
+        this.typeOfTower = towerType;
+        this.units = newUnits;
+        this._parentNode = parentNode || null;
+        this._client_id = client_id   || null;
+    }
+
     get parentNode() {
         return this._parentNode;
     }
@@ -74,7 +86,7 @@ class Tower {
                 break;
             case towerType.ENEMY:
                 color = "#000000";
-                fill = true;
+                fill = false;
                 break;
             default:
                 console.log("wtf!!");

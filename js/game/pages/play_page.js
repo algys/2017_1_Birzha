@@ -102,7 +102,6 @@ class PlayPage extends BasePage {
 
                 this.enemiesObject[json["playerid"]].createNewEnemyVertex(json["move"]);
                 /* TODO kostyl*/
-                this.enemiesObject[json["playerid"]].drawObject();
             }
             this.nowPerforming.setPerforming(true);
             this.world.update();

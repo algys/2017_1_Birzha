@@ -27,15 +27,16 @@ class Enemy extends GameObject {
 
     drawObject() {
         this.enemyGraph.showNodes();
+        this.world.update();
     }
 
     animation(dx, dy) {}
 
     generateEnemyTower(point, units) {
         let tower = new Tower(this.world, point.x, point.y, towerType.ENEMY,
-            units, null);
+            units);
 
-        tower.client_id = this.nickName;
+        tower.client_id = this.clientId;
         return tower;
     }
 
@@ -47,15 +48,28 @@ class Enemy extends GameObject {
 
         let lastNode = this.currentNode;
 
-        let tower = this.generateEnemyTower(pointTo, genUnits);
+        let fromTower = this.world.arrayMap[pointFrom.x][pointFrom.y];
+        let toTower = this.world.arrayMap[pointTo.x][pointTo.y];
+        let tower = null;
 
-        let fromNode = this.world.arrayMap[pointFrom.x][pointFrom.y];
-        this.enemyGraph.setCurrentVertex(fromNode);
+        if(!toTower)
+            tower = this.generateEnemyTower(pointTo, genUnits);
+        else {
+            toTower.refreshTower(towerType.ENEMY, genUnits,
+                null /* parent */, this.clientId); // TODO check parentNode
+            tower = toTower;
+        }
+
+        this.enemyGraph.setCurrentVertex(fromTower);
         this.currentNode = this.enemyGraph.addNewVertexToCurrent(tower);
         this.world.addTowerToMap(pointTo, this.currentNode);
 
-        tower.parentNode = this.currentNode; // TODO add node in constructor
+        if(tower.parentNode)
+            tower.parentNode = this.currentNode; // TODO add node in constructor
+
         lastNode.data.units = info["parentUnitsCount"];
+
+        this.drawObject();
     }
 
     setPerforming(flag) {
