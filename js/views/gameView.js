@@ -1,6 +1,6 @@
 import BaseView from './baseView';
 
-import startGame from '../game/init'
+import { startGame, debugGame } from '../game/init'
 
 class GameView extends BaseView {
     constructor(node) {
@@ -9,11 +9,13 @@ class GameView extends BaseView {
 
     show() {
         super.show();
-
         let div = document.getElementById("site-interface");
         div.style.visibility = 'hidden';
 
-        startGame(this.node);
+        if(!mainConfiguration.debugMode)
+            startGame(this.node);
+        else
+            debugGame(this.node);
     }
     hide() {
         super.hide();

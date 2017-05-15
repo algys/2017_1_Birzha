@@ -1,3 +1,5 @@
+import './conf'
+
 import Router from './router';
 
 import MenuView from './views/menuView'
@@ -20,7 +22,8 @@ import serviceWorkerLoader from '../worker_loader';
     window.confServer = {};
     let url = window.location.pathname;
 
-    serviceWorkerLoader();
+    if(mainConfiguration.needAppCache)
+        serviceWorkerLoader();
 
     fetch('js/conf/dev.conf.json').then(function (data) {
         return data.json();
@@ -82,7 +85,6 @@ import serviceWorkerLoader from '../worker_loader';
         document.cookie = updatedCookie;
     }
 
-    ;
     if(getCookie('logged')==='true'){
         console.log("Already login !");
         router.register('/', menuView);

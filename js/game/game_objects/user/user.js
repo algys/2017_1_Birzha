@@ -16,8 +16,8 @@ class User extends GameObject {
             "getRealPosition": this.myRealPosition.bind(this),
             "addTower": this.addNewTower.bind(this),
             "setCurrentNode": this.setCurrentNode.bind(this),
-            "getClientId": ()=>{ return this.pid; },
-            "getPerforming": ()=>{ return this.performing }
+            "getClientId": () => { return this.pid; },
+            "getPerforming": () => { return this.performing }
         }, point);
 
         this.userAction = new UserAction(connection);

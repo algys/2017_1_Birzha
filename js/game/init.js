@@ -10,6 +10,7 @@ import PlayPage from './pages/play_page';
 
 import Connection from './services/connection';
 import Room from './services/room';
+import User from './game_objects/user/user' /* add for debug */
 
 window.DATATYPE_ROOMINFO = "DATATYPE_ROOMINFO";
 window.DATATYPE_PLAYERMOVE = "DATATYPE_PLAYERMOVE";
@@ -60,13 +61,16 @@ window.towerType = {
     ENEMY: 2
 };
 
-function startGame(elementDOM) {
+function loadResourse(callback) {
     let needFilesForProjectManifest = [
         {id: "playButton", src: "./img/play.png"}
     ];
 
-    let connectionService = null;
+    new Loader(needFilesForProjectManifest, callback);
+}
 
+function startGame(elementDOM) {
+    let connectionService = null;
     let room = null;
 
     const iAmReady = function () {
@@ -86,7 +90,7 @@ function startGame(elementDOM) {
     let menuPage = new MenuPage(world, iAmReady);
 
 
-    new Loader(needFilesForProjectManifest, (result) => {
+    loadResourse((result) => {
         console.log(result);
         menuPage.startPage(result);
     });
@@ -128,4 +132,25 @@ function startGame(elementDOM) {
     });
 }
 
-export default startGame;
+function debugGame(elementDOM) {
+    let connectionService = null;
+    let room = null;
+
+    let area = new Area(elementDOM);
+    let world = new World(elementDOM, area);
+
+    const iAmReady = () => {
+        let user = new User(null, world, {x: 10, y: 10}, 1, "noname", 100);
+        user.setPerforming(true);
+    };
+
+    let menuPage = new MenuPage(world, iAmReady);
+
+
+    loadResourse((result) => {
+        console.log(result);
+        menuPage.startPage(result);
+    });
+}
+
+export { startGame, debugGame };
