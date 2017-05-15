@@ -36,6 +36,7 @@ class Auth{
         let status = false;
         new Request('http://'+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
             .addResponse(function (response) {
+                console.log(response);
                 if (response.status !== 200) {
                     console.log('Looks like there was a problem. Status Code: ' +
                         response.status);
@@ -66,6 +67,7 @@ class Auth{
         }
         new Request('http://'+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
             .addResponse(function (response) {
+                console.log(response);
                 if (response.status !== 200) {
                     console.log('Looks like there was a problem. Status Code: ' +
                         response.status);
@@ -89,8 +91,9 @@ class Auth{
 
     register(data, success, error){
         let status = false;
-        new Request('http://'+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
+        new Request('http://'+conf.ip[conf.baseIP].host + ':' + conf.ip[conf.baseIP].port+'/api')
             .addResponse(function (response) {
+                console.log(response);
                 if (response.status !== 200) {
                     console.log('Looks like there was a problem. Status Code: ' +
                         response.status);

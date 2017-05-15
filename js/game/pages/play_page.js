@@ -83,25 +83,46 @@ class PlayPage extends BasePage {
         controls.scoreBoard.addPlayerToScoreBoard("Sergey", 15352);
         controls.scoreBoard.addPlayerToScoreBoard("Daniyar", 15352);
 
+        /* code for algys */
         this.connection.addEventListen(DATATYPE_PLAYERMOVE, (json) => {
             if(json["move"]["type"] !== "ACCEPT_OK") // TODO make fight
                 return;
 
+            let nextpid = json["nextpid"];
+
             this.nowPerforming.setPerforming(false);
-            if(!(json["playerid"] in this.enemiesObject)) {
+            if(!(json["pid"] in this.enemiesObject)) {
                 /* dont draw me */
-                this.nowPerforming = this.enemiesObject[json["nextid"]];
+                if(nextpid in this.enemiesObject)
+                    this.nowPerforming = this.enemiesObject[json["nextpid"]];
+                else
+                    alert("wtf!");
+
                 console.log("No Draw and update!");
             } else {
-                if(json["nextid"] === this.user.clientId)
+                if(json["nextid"] === this.user.pid)
                     this.nowPerforming = this.user;
                 else
                     this.nowPerforming = this.enemiesObject[json["nextid"]];
 
                 console.log("Draw: " + this.enemiesObject[json["playerid"]]);
 
-                this.enemiesObject[json["playerid"]].createNewEnemyVertex(json["move"]);
-                /* TODO kostyl*/
+                let player = this.enemiesObject[json["pid"]];
+                let valueUpdates = json["valueUpdate"];
+                let newNodes = json["newNodes"];
+
+                for(let update in valueUpdates) {
+
+                }
+
+                for(let newTower in newNodes) {
+                    let localPid = newTower["pid"];
+                    if(localPid == player.pid) {
+                        player.createNewEnemyVertex();
+                    }
+                }
+
+                // this.enemiesObject[json["playerid"]].createNewEnemyVertex(json["move"]);
             }
             this.nowPerforming.setPerforming(true);
             this.world.update();
@@ -129,7 +150,7 @@ class PlayPage extends BasePage {
             } else if(status == STATUS_PLAYING && "pid" in json) {
                 let pid = json["pid"];
 
-                if(pid == this.user.clientId) {
+                if(pid == this.user.pid) {
                     this.nowPerforming = this.user;
                 } else if(pid in this.enemiesObject) {
                     this.nowPerforming = this.enemiesObject[pid];

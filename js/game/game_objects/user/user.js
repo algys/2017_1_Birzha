@@ -16,7 +16,7 @@ class User extends GameObject {
             "getRealPosition": this.myRealPosition.bind(this),
             "addTower": this.addNewTower.bind(this),
             "setCurrentNode": this.setCurrentNode.bind(this),
-            "getClientId": ()=>{ return this.clientId; },
+            "getClientId": ()=>{ return this.pid; },
             "getPerforming": ()=>{ return this.performing }
         }, point);
 
@@ -125,7 +125,7 @@ class User extends GameObject {
 
     setCurrentNode(pointCurrentTower) {
         let tower = this.getFromMap(pointCurrentTower);
-        if(tower.client_id === this.clientId) {
+        if(tower.client_id === this.pid) {
             if(tower.parentNode == null)
                 alert("wtf!");
 
@@ -157,7 +157,7 @@ class User extends GameObject {
         let tower = new Tower(this.world, point.x, point.y, towerType.DEFAULT,
             units);
 
-        tower.client_id = this.clientId;
+        tower.client_id = this.pid;
         return tower;
     }
 

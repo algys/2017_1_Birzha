@@ -1,7 +1,7 @@
 class GameObject {
     constructor(world, clientId, nickName) {
         this.world = world;
-        this.clientId = clientId;
+        this.pid = clientId;
         this.nickName = nickName;
     }
 

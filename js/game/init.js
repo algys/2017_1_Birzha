@@ -11,24 +11,24 @@ import PlayPage from './pages/play_page';
 import Connection from './services/connection';
 import Room from './services/room';
 
-window.DATATYPE_ROOMINFO = 1;
-window.DATATYPE_PLAYERMOVE = 2;
-window.DATATYPE_NEWBONUS = 3;
-window.DATATYPE_ERROR = 4;
-window.DATATYPE_HELLO = 5;
-window.DATATYPE_ROOM_DESTRUCT= 6;
+window.DATATYPE_ROOMINFO = "DATATYPE_ROOMINFO";
+window.DATATYPE_PLAYERMOVE = "DATATYPE_PLAYERMOVE";
+window.DATATYPE_NEWBONUS = "DATATYPE_NEWBONUS";
+window.DATATYPE_ERROR = "DATATYPE_ERROR";
+window.DATATYPE_HELLO = "DATATYPE_HELLO";
+window.DATATYPE_ROOM_DESTRUCT = "DATATYPE_ROOM_DESTRUCT";
 
-window.READY_FOR_ROOM_SEARCH = 1;
-window.READY_FOR_GAME_START = 2;
-window.GAME_UPDATE_MY_MOVE = 3;
+window.READY_FOR_ROOM_SEARCH = "ACTION_READY_FOR_ROOM_SEARCH";
+window.READY_FOR_GAME_START = "ACTION_READY_FOR_GAME_START";
+window.GAME_UPDATE_MY_MOVE = "ACTION_GAME_MOVE";
 
 window.RES_OK = 0;
 window.RES_ROLLBACK = 1;
 window.RES_ERROR = 2;
 
-window.STATUS_CREATING = 0;
-window.STATUS_PLAYING = 1;
-window.STATUS_READY = 2;
+window.STATUS_CREATING = "STATUS_CREATING";
+window.STATUS_PLAYING = "STATUS_PLAYING";
+window.STATUS_READY = "STATUS_READY";
 
 window.conf = {
     ip: [ {host: "172.16.83.124", port: 8081, path: "/game "},
@@ -102,6 +102,7 @@ function startGame(elementDOM) {
         let ifstop = ()=>{
             menuPage.startPage();
         };
+
         connectionService.addEventListen(DATATYPE_HELLO, (json) => {
             let id = json["id"];
             let nickname = json["nickname"];
@@ -110,6 +111,8 @@ function startGame(elementDOM) {
                 alert("error");
                 return;
             }
+
+            console.log("start after hello");
             room = new Room(connectionService, menuPage, id, nickname, (room) => {
                 room.deleteListenRoomInfo();
 

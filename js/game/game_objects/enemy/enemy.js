@@ -36,8 +36,28 @@ class Enemy extends GameObject {
         let tower = new Tower(this.world, point.x, point.y, towerType.ENEMY,
             units);
 
-        tower.client_id = this.clientId;
+        tower.client_id = this.pid;
         return tower;
+    }
+
+    /* code for algys */
+    /**
+     * this function for add town - (for newNodes)
+     */
+    addOwnTower(point, unitsCount) {
+        let toTower = this.world.arrayMap[pointTo.x][pointTo.y];
+        let tower = null;
+
+        if(!toTower)
+            tower = this.generateEnemyTower(pointTo, genUnits);
+        else {
+            toTower.refreshTower(towerType.ENEMY, genUnits,
+                null /* parent */, this.pid); // TODO check parentNode
+            tower = toTower;
+        }
+
+        this.world.addTowerToMap(point, tower);
+        this.drawObject();
     }
 
     /* example: {"xfrom":3,"yfrom":1,"xto":5,"yto":2,"unitsCount":50,"parentUnitsCount":0} */
@@ -56,7 +76,7 @@ class Enemy extends GameObject {
             tower = this.generateEnemyTower(pointTo, genUnits);
         else {
             toTower.refreshTower(towerType.ENEMY, genUnits,
-                null /* parent */, this.clientId); // TODO check parentNode
+                null /* parent */, this.pid); // TODO check parentNode
             tower = toTower;
         }
 
