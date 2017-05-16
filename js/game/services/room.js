@@ -21,7 +21,7 @@ class Room {
 
             this.players = players;
 
-            if(status == STATUS_PLAYING) {
+            if(status === STATUS_PLAYING) {
                 this.roomId = roomId; // TODO change runID
                 this.pid = pID;
 

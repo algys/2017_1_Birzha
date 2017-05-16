@@ -57,6 +57,7 @@ class PlayPage extends BasePage {
 
         for(let index in this.enemiesData) {
             let enemyData = this.enemiesData[index];
+            debugger;
             this.enemiesObject[enemyData.id] = new Enemy(this.connection, this.world, enemyData);
             if(enemyData.id == perfomingPlayer) {
                 this.nowPerforming = this.enemiesObject[enemyData.id];
@@ -110,20 +111,35 @@ class PlayPage extends BasePage {
                 let nowEnemy = this.enemiesObject[json["pid"]];
                 let valueUpdates = json["valueUpdate"];
                 let newNodes = json["newNodes"];
+                let newLinks = json["newLinks"];
 
-                for(let update in valueUpdates) {
-                    // TODO
-                }
+                valueUpdates.forEach((update)=>{
+                    let point = {
+                        x: update["x"],
+                        y: update["y"]
+                    };
+                    let newUnits = update["value"];
+                    this.world.getTowerFromMap(point).changeUnits(newUnits);
+                });
 
-                debugger;
-                for(let index in newNodes) {
-                    let obj = newNodes[nodeIndex];
-
-                    let localPid = obj["pid"];
-                    if(localPid == nowEnemy.pid) {
-                        nowEnemy.addOwnTower(obj /* with x and y */, 342);
+                newNodes.forEach((newNode)=>{
+                    let localPid = newNode["pid"];
+                    if(localPid === nowEnemy.pid) {
+                        nowEnemy.addOwnTower(newNode /* with x and y */);
                     }
-                }
+                });
+
+                newLinks.forEach((newLink)=>{
+                    let from = newLink["l"];
+                    let to = newLink["r"];
+                    debugger;
+                    let fromTower = this.world.getTowerFromMap(from);
+                    let toTower = this.world.getTowerFromMap(to);
+                    let pid = fromTower.client_id;
+                    if(!this.enemiesObject[pid])
+                        return;
+                    this.enemiesObject[pid].createLink(fromTower,toTower);
+                });
 
                 // this.enemiesObject[json["playerid"]].createNewEnemyVertex(json["move"]);
             }
@@ -153,7 +169,7 @@ class PlayPage extends BasePage {
             } else if(status == STATUS_PLAYING && "pid" in json) {
                 let pid = json["pid"];
 
-                if(pid == this.user.pid) {
+                if(pid === this.user.pid) {
                     this.nowPerforming = this.user;
                 } else if(pid in this.enemiesObject) {
                     this.nowPerforming = this.enemiesObject[pid];

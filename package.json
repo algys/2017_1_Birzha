@@ -29,5 +29,11 @@
     "presets": [
       "es2015"
     ]
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.4.1",
+    "babel-preset-latest": "^6.24.1",
+    "webpack": "^2.5.1"
   }
 }

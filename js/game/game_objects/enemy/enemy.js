@@ -20,7 +20,7 @@ class Enemy extends GameObject {
         let tower = this.generateEnemyTower(point, info.units);
 
         this.currentNode = this.enemyGraph.addNewVertexToCurrent(tower);
-        this.world.addTowerToMap(point, this.currentNode);
+        this.world.addTowerToMap(point, tower);
 
         this.drawObject();
     }
@@ -37,6 +37,7 @@ class Enemy extends GameObject {
             units);
 
         tower.client_id = this.pid;
+        tower.draw();
         return tower;
     }
 
@@ -44,7 +45,13 @@ class Enemy extends GameObject {
     /**
      * this function for add town - (for newNodes)
      */
-    addOwnTower(point, unitsCount) {
+    addOwnTower(newNode) {
+        let point = {
+            x : newNode.x,
+            y : newNode.y
+        };
+        let unitsCount = newNode.value;
+
         let toTower = this.world.arrayMap[point.x][point.y];
         let tower = null;
 
@@ -96,6 +103,12 @@ class Enemy extends GameObject {
         this.enemyGraph.shapes.forEach((val, item)=>{
             item.setPerforming(flag);
         });
+    }
+
+    createLink(from, to){
+        debugger;
+        from.parentNode().nextNode.push(to.parentNode);
+        this.drawObject();
     }
 }
 

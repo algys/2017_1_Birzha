@@ -141,6 +141,10 @@ class World {
     addTowerToMap(point, tower) {
         this.arrayMap[point.x][point.y] = tower;
     }
+
+    getTowerFromMap(point){
+        return this.arrayMap[point.x][point.y];
+    }
 }
 
 export default World;

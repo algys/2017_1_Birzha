@@ -13,7 +13,7 @@ class Area {
         };
         this.rectSize = conf.rectSize;
         this.borderSize = conf.borderSize;
-        this.worldSize = 100;
+        this.worldSize = 20;
 
         this.canvas.height = document.documentElement.clientHeight;
         this.canvas.width = document.documentElement.clientWidth;

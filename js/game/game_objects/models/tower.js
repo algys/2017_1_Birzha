@@ -17,6 +17,12 @@ class Tower {
         this._client_id = null;
     }
 
+    changeUnits(units){
+        this.units = units;
+        this.cache.text.text = units;
+        this.world.update();
+    }
+
     refreshTower(towerType, newUnits, parentNode, client_id) {
         this.world.map.removeChild(this.cache.circle);
         this.world.map.removeChild(this.cache.text);

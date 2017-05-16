@@ -34,9 +34,7 @@ class MenuPage extends BasePage {
         this.world.update();
         this.world.area.world.stage.update();
 
-        ;
         this.buttonAnimate = function(event){
-        //    ;
             this.buttonMenu.rotation += 2;
             this.world.update();
         };
@@ -49,8 +47,8 @@ class MenuPage extends BasePage {
     }
 
     stopPage() {
-        this.world.stage.removeChild(this.buttonMenu);
-        this.world.stage.clear();
+        this.world.map.removeChild(this.buttonMenu);
+    //    this.world.map.clear();
 
         this.world.update();
     }
