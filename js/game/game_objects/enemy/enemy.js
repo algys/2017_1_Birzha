@@ -45,13 +45,13 @@ class Enemy extends GameObject {
      * this function for add town - (for newNodes)
      */
     addOwnTower(point, unitsCount) {
-        let toTower = this.world.arrayMap[pointTo.x][pointTo.y];
+        let toTower = this.world.arrayMap[point.x][point.y];
         let tower = null;
 
         if(!toTower)
-            tower = this.generateEnemyTower(pointTo, genUnits);
+            tower = this.generateEnemyTower(point, unitsCount);
         else {
-            toTower.refreshTower(towerType.ENEMY, genUnits,
+            toTower.refreshTower(towerType.ENEMY, unitsCount,
                 null /* parent */, this.pid); // TODO check parentNode
             tower = toTower;
         }

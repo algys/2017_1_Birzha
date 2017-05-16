@@ -85,7 +85,7 @@ class PlayPage extends BasePage {
 
         /* code for algys */
         this.connection.addEventListen(DATATYPE_PLAYERMOVE, (json) => {
-            if(json["move"]["type"] !== "ACCEPT_OK") // TODO make fight
+            if(json["result"] !== "ACCEPT_OK") // TODO make fight
                 return;
 
             let nextpid = json["nextpid"];
@@ -100,25 +100,28 @@ class PlayPage extends BasePage {
 
                 console.log("No Draw and update!");
             } else {
-                if(json["nextid"] === this.user.pid)
+                if(nextpid === this.user.pid)
                     this.nowPerforming = this.user;
                 else
-                    this.nowPerforming = this.enemiesObject[json["nextid"]];
+                    this.nowPerforming = this.enemiesObject[nextpid];
 
-                console.log("Draw: " + this.enemiesObject[json["playerid"]]);
+                console.log("Draw: " + this.enemiesObject[json["pid"]]);
 
-                let player = this.enemiesObject[json["pid"]];
+                let nowEnemy = this.enemiesObject[json["pid"]];
                 let valueUpdates = json["valueUpdate"];
                 let newNodes = json["newNodes"];
 
                 for(let update in valueUpdates) {
-
+                    // TODO
                 }
 
-                for(let newTower in newNodes) {
-                    let localPid = newTower["pid"];
-                    if(localPid == player.pid) {
-                        player.createNewEnemyVertex();
+                debugger;
+                for(let index in newNodes) {
+                    let obj = newNodes[nodeIndex];
+
+                    let localPid = obj["pid"];
+                    if(localPid == nowEnemy.pid) {
+                        nowEnemy.addOwnTower(obj /* with x and y */, 342);
                     }
                 }
 

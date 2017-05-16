@@ -35,7 +35,7 @@ window.conf = {
     ip: [ {host: "172.16.83.124", port: 8081, path: "/game "},
           {host: "192.168.43.107", port: 8081, path: "/game"},
           {host: "172.16.90.2", port: 8081, path: "/game"},
-          {host: "172.16.94.65", port: 8081, path: "/game"},
+          {host: "172.20.10.4", port: 8081, path: "/game"},
           {host: "localhost", port: 8081, path: "/game"},
           {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
           {host: "172.16.94.65", port: 8081, path: "/game"}
@@ -111,7 +111,7 @@ function startGame(elementDOM) {
             let id = json["id"];
             let nickname = json["nickname"];
 
-            if(!id || !nickname) {
+            if(id == null || nickname == null) {
                 alert("error");
                 return;
             }
@@ -119,7 +119,6 @@ function startGame(elementDOM) {
             console.log("start after hello");
             room = new Room(connectionService, menuPage, id, nickname, (room) => {
                 room.deleteListenRoomInfo();
-
                 menuPage.stopPage(); // destruct room choose
 
                 playPage.startPage(room, ifstop);
