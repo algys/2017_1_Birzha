@@ -1,7 +1,4 @@
-import { randomInteger } from '../ulits/system';
-
 import BasePage from './base_page';
-import Controls from '../controls/controls';
 
 class MenuPage extends BasePage {
     constructor(world, callBackIfRun) {
@@ -32,7 +29,7 @@ class MenuPage extends BasePage {
         this.buttonMenu.regY = this.buttonMenu.image.height / 2;
 
         this.world.update();
-        this.world.area.world.stage.update();
+        this.world.area.update();
 
         this.buttonAnimate = function(event){
             this.buttonMenu.rotation += 2;
@@ -48,13 +45,10 @@ class MenuPage extends BasePage {
 
     stopPage() {
         this.world.map.removeChild(this.buttonMenu);
-    //    this.world.map.clear();
-
         this.world.update();
     }
 
     setEnableRotation(flag) {
-    //    ;
         if(flag && !createjs.Ticker.hasEventListener("tick")) {
             createjs.Ticker.addEventListener("tick", this.buttonAnimate.bind(this));
             createjs.Ticker.setInterval(10);

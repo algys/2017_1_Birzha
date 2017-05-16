@@ -13,14 +13,15 @@ class Area {
         };
         this.rectSize = conf.rectSize;
         this.borderSize = conf.borderSize;
-        this.worldSize = 20;
+        this.worldSizeH = 20;
+        this.worldSizeW = 20;
 
         this.canvas.height = document.documentElement.clientHeight;
         this.canvas.width = document.documentElement.clientWidth;
 
         this.fullSize = {
-            x: this.rectSize * this.worldSize,
-            y: this.rectSize * this.worldSize
+            x: this.rectSize * this.worldSizeW,
+            y: this.rectSize * this.worldSizeH
         };
 
         elementDOM.appendChild(this.canvas);
@@ -45,9 +46,9 @@ class Area {
 
         this.cells = [];
 
-        for (let i = 0; i < this.worldSize; i++) {
+        for (let i = 0; i < this.worldSizeH; i++) {
             let t = [];
-            for (let j = 0; j < this.worldSize; j++) {
+            for (let j = 0; j < this.worldSizeW; j++) {
                 let cell = new createjs.Shape();
                 cell.graphics
                     .setStrokeStyle(this.borderSize).beginStroke("#fffbf7")
@@ -75,8 +76,6 @@ class Area {
             start: 0,
             end: xCount + 5
         };
-
-
     }
 
     getExactPosition(x, y) {
@@ -186,6 +185,9 @@ class Area {
         return {x: x - this.offset.x, y: y - this.offset.y}
     }
 
+    update(){
+        this.world.stage.update();
+    }
 }
 
 export default Area;

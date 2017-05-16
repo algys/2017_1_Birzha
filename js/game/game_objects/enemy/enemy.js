@@ -19,7 +19,6 @@ class Enemy extends GameObject {
 
         let tower = this.generateEnemyTower(point, info.units);
 
-        this.currentNode = this.enemyGraph.addNewVertexToCurrent(tower);
         this.world.addTowerToMap(point, tower);
 
         this.drawObject();
@@ -38,64 +37,28 @@ class Enemy extends GameObject {
 
         tower.client_id = this.pid;
         tower.draw();
+
+        let newNode = this.enemyGraph.addNewNode(tower);
+        tower.parentNode = newNode;
+
         return tower;
     }
 
-    /* code for algys */
-    /**
-     * this function for add town - (for newNodes)
-     */
-    addOwnTower(newNode) {
+    addNewTower(newNodeInfo) {
         let point = {
-            x : newNode.x,
-            y : newNode.y
+            x : newNodeInfo.x,
+            y : newNodeInfo.y
         };
-        let unitsCount = newNode.value;
-
-        let toTower = this.world.arrayMap[point.x][point.y];
-        let tower = null;
-
-        if(!toTower)
-            tower = this.generateEnemyTower(point, unitsCount);
-        else {
-            toTower.refreshTower(towerType.ENEMY, unitsCount,
-                null /* parent */, this.pid); // TODO check parentNode
-            tower = toTower;
+        let unitsCount = newNodeInfo.value;
+        debugger;
+        if(this.world.getTowerFromMap(point)){
+            let to = this.world.getTowerFromMap(point);
+            to.destruct();
         }
+
+        let tower = this.generateEnemyTower(point, unitsCount);
 
         this.world.addTowerToMap(point, tower);
-        this.drawObject();
-    }
-
-    /* example: {"xfrom":3,"yfrom":1,"xto":5,"yto":2,"unitsCount":50,"parentUnitsCount":0} */
-    createNewEnemyVertex(info) {
-        let pointFrom = { x: info["xfrom"], y: info["yfrom"] };
-        let pointTo = { x: info["xto"], y: info["yto"] };
-        let genUnits = info["unitsCount"];
-
-        let lastNode = this.currentNode;
-
-        let fromTower = this.world.arrayMap[pointFrom.x][pointFrom.y];
-        let toTower = this.world.arrayMap[pointTo.x][pointTo.y];
-        let tower = null;
-
-        if(!toTower)
-            tower = this.generateEnemyTower(pointTo, genUnits);
-        else {
-            toTower.refreshTower(towerType.ENEMY, genUnits,
-                null /* parent */, this.pid); // TODO check parentNode
-            tower = toTower;
-        }
-
-        this.enemyGraph.setCurrentVertex(fromTower);
-        this.currentNode = this.enemyGraph.addNewVertexToCurrent(tower);
-        this.world.addTowerToMap(pointTo, this.currentNode);
-
-        if(tower.parentNode)
-            tower.parentNode = this.currentNode; // TODO add node in constructor
-
-        lastNode.data.units = info["parentUnitsCount"];
-
         this.drawObject();
     }
 
@@ -106,8 +69,7 @@ class Enemy extends GameObject {
     }
 
     createLink(from, to){
-        debugger;
-        from.parentNode().nextNode.push(to.parentNode);
+        this.enemyGraph.addNewLink(from.parentNode, to.parentNode);
         this.drawObject();
     }
 }

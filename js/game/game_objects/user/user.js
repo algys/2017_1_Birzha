@@ -96,7 +96,6 @@ class User extends GameObject {
 
     playerMoveLink(fromNode, toNode, unitsCount) {
         fromNode.data.units -= unitsCount;
-
     }
 
     playerMoveFight(userNode, enemyNode, unitsCount) {

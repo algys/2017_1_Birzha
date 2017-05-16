@@ -50,16 +50,15 @@ class PlayPage extends BasePage {
             meData.units);
 
         /* if user step */
-        if(perfomingPlayer == room.meId) {
+        if(perfomingPlayer === room.meId) {
             this.nowPerforming = this.user;
             this.user.setPerforming(true);
         }
 
         for(let index in this.enemiesData) {
             let enemyData = this.enemiesData[index];
-            debugger;
             this.enemiesObject[enemyData.id] = new Enemy(this.connection, this.world, enemyData);
-            if(enemyData.id == perfomingPlayer) {
+            if(enemyData.id === perfomingPlayer) {
                 this.nowPerforming = this.enemiesObject[enemyData.id];
                 this.enemiesObject[enemyData.id].setPerforming(true);
             }
@@ -92,7 +91,8 @@ class PlayPage extends BasePage {
             let nextpid = json["nextpid"];
 
             this.nowPerforming.setPerforming(false);
-            if(!(json["pid"] in this.enemiesObject)) {
+            debugger;
+            if(json["pid"] === this.user.pid) {
                 /* dont draw me */
                 if(nextpid in this.enemiesObject)
                     this.nowPerforming = this.enemiesObject[json["nextpid"]];
@@ -125,24 +125,21 @@ class PlayPage extends BasePage {
                 newNodes.forEach((newNode)=>{
                     let localPid = newNode["pid"];
                     if(localPid === nowEnemy.pid) {
-                        nowEnemy.addOwnTower(newNode /* with x and y */);
+                        nowEnemy.addNewTower(newNode);
                     }
                 });
 
                 newLinks.forEach((newLink)=>{
                     let from = newLink["l"];
                     let to = newLink["r"];
-                    debugger;
                     let fromTower = this.world.getTowerFromMap(from);
                     let toTower = this.world.getTowerFromMap(to);
                     let pid = fromTower.client_id;
-                    if(!this.enemiesObject[pid])
-                        return;
-                    this.enemiesObject[pid].createLink(fromTower,toTower);
+                    if(this.enemiesObject[pid])
+                       this.enemiesObject[pid].createLink(fromTower,toTower);
                 });
-
-                // this.enemiesObject[json["playerid"]].createNewEnemyVertex(json["move"]);
             }
+
             this.nowPerforming.setPerforming(true);
             this.world.update();
         });
@@ -162,23 +159,27 @@ class PlayPage extends BasePage {
         this.connection.addEventListen(DATATYPE_ROOMINFO, (json) => {
             let status = json["status"];
             /* while exit and wait new game */
-            if(status == STATUS_CREATING) {
+            if(status === STATUS_CREATING) {
                 // TODO to menu
                 // alert("exit game and new room");
                 return;
-            } else if(status == STATUS_PLAYING && "pid" in json) {
-                let pid = json["pid"];
+            } else {
+                if (status === STATUS_PLAYING && "pid" in json) {
+                    let pid = json["pid"];
 
-                if(pid === this.user.pid) {
-                    this.nowPerforming = this.user;
-                } else if(pid in this.enemiesObject) {
-                    this.nowPerforming = this.enemiesObject[pid];
+                    if (pid === this.user.pid) {
+                        this.nowPerforming = this.user;
+                    } else if (pid in this.enemiesObject) {
+                        this.nowPerforming = this.enemiesObject[pid];
+                    }
+
+                    this.nowPerforming.setPerforming(true);
+                    this.world.update();
+
+                } else {
+                    alert("wtf!!!!");
                 }
-
-                this.nowPerforming.setPerforming(true);
-                this.world.update();
-
-            } else { alert("wtf!!!!"); }
+            }
         });
         window.onbeforeunload = ()=>{
             this.connection.disconnect();
@@ -186,28 +187,14 @@ class PlayPage extends BasePage {
     }
 
     stopPage() {
-        this.world.stage.removeAllChildren();
-        this.world.stage.clear();
-
+        this.world.map.removeAllChildren();
         this.world.update();
+        this.world.area.stage.removeAllChildren();
+        debugger;
+
+        this.connection.disconnect();
         this.stop();
         // TODO remove game scene and work with menupage
-    }
-
-    updateAllUsers(json) {
-        // TODO Noraml method`
-        /*
-        console.log("receive");
-        let objects = json["newUsersPositions"];
-        for (let key in objects) {
-            console.log(objects[key]["NewPoint"]["x"]);
-            console.log(objects[key]["NewPoint"]["y"]);
-            this.enemies.push(new User(this.world, {
-                x: objects[key]["NewPoint"]["x"],
-                y: objects[key]["NewPoint"]["y"]
-            }));
-        }
-        */
     }
 }
 

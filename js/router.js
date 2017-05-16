@@ -38,7 +38,7 @@ class Router {
      * @return {boolean} - если есть маршрурт
      */
     go(path) {
-        if(path == '/back'){
+        if(path === '/back'){
             window.history.back();
             return true;
         }
@@ -49,7 +49,6 @@ class Router {
             return false;
 
         if (!view) {
-            ;
             view = this.routes['/'];
             location.pathname = '/';
             path = '/';
@@ -73,10 +72,8 @@ class Router {
     }
 
     startPage(url){
-        ;
         let view = this._getViewByRoute(url);
         if (!view) {
-            ;
             view = this.routes['/'];
             location.pathname = '/';
             url = '/';

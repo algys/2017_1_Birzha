@@ -38,6 +38,14 @@ class GraphTree {
         return node;
     }
 
+    addNewLink(from, to){
+        this.tree.addLink(from, to);
+    }
+
+    addNewNode(data){
+        return this.tree.addNode(data, null);
+    }
+
     destruct() {
         this.world.stage.removeChild(this.graphLine);
         console.log(this.shapes);
@@ -73,13 +81,12 @@ class GraphTree {
             this.setNode(current.data);
             current.nextNode.forEach((item)=>{
                 if(!marker.has(item)) {
+                    this.drawWireBetweenTowers(current.data.point, item.data.point);
                     this.go(item, marker);
                 } else {
-                    this.drawWireBetweenTowers(current.data.point, item.data.point);
+             //       this.drawWireBetweenTowers(current.data.point, item.data.point);
                 }
             });
-            if(current.parentNode)
-                this.drawWireBetweenTowers(current.data.point, current.parentNode.data.point);
         });
         this.go.bind(this)(currentNode, marker);
 

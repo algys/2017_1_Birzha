@@ -5,27 +5,29 @@ class Tree {
         this.rootNode = null;
     }
 
-    get root() {
-        return this.rootNode;
+    addNode(data, parent){
+        let newNode = new NodeImpl(data);
+        if(!this.rootNode){
+            this.rootNode = newNode;
+        }
+        if(parent)
+            this.addLink(newNode, parent);
+        return newNode;
     }
 
-    addNode(data, parent){
-        if(parent === null){
-            this.rootNode = new NodeImpl(data, null);
-            return this.rootNode;
-        }
-        let newNode = new NodeImpl(data, parent);
-        parent.nextNode.push(newNode);
-        return newNode;
+    addLink(to, from){
+        to.nextNode.push(from);
+        from.nextNode.push(to);
+    }
+
+    get root(){
+        return this.rootNode;
     }
 }
 
-function NodeImpl(data, parentNode) {
+function NodeImpl(data) {
     this.nextNode = [];
-    this.parentNode = parentNode;
-    // Это нода
-    this.data = data; // in data we need id игрока,цвет игрока, И КООРДИНАТЫ, КОТОРЫЕ В ДВУХМЕРНОМ МАССИВЕ
-    // ЕЩЕ нужно хранить количество поинтов в данный момент
+    this.data = data;
 }
 
 NodeImpl.prototype.addNode = function (node) {

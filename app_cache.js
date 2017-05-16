@@ -1,5 +1,5 @@
 self.addEventListener('activate', function(event) {
-    console.log('activate', event);
+//    console.log('activate', event);
 });
 
 const CACHE_NAME = 'app_serviceworker_v_1',
@@ -31,7 +31,7 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('fetch', function(event) {
 
-    console.log('fetch', event);
+  //  console.log('fetch', event);
     event.respondWith(
         caches.match(event.request).then(function(cachedResponse) {
 

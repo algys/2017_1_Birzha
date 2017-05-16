@@ -17,7 +17,7 @@ window.DATATYPE_PLAYERMOVE = "DATATYPE_PLAYERMOVE";
 window.DATATYPE_NEWBONUS = "DATATYPE_NEWBONUS";
 window.DATATYPE_ERROR = "DATATYPE_ERROR";
 window.DATATYPE_HELLO = "DATATYPE_HELLO";
-window.DATATYPE_ROOM_DESTRUCT = "DATATYPE_ROOM_DESTRUCT";
+window.DATATYPE_ROOM_DESTRUCT = "DATATYPE_ROOM_DESTRUCTION";
 
 window.READY_FOR_ROOM_SEARCH = "ACTION_READY_FOR_ROOM_SEARCH";
 window.READY_FOR_GAME_START = "ACTION_READY_FOR_GAME_START";
@@ -40,7 +40,7 @@ window.conf = {
           {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
           {host: "172.16.94.65", port: 8081, path: "/game"}
     ],
-    baseIP: 3,
+    baseIP: 4,
 
     countUsersInRoom: 2,
 
@@ -79,14 +79,12 @@ function startGame(elementDOM) {
             return;
         }
 
-   //     world.canvas.requestPointerLock(); // for lock user
-
         room.iAmReady();
     };
 
     let area = new Area(elementDOM);
-
     let world = new World(elementDOM, area);
+
     let menuPage = new MenuPage(world, iAmReady);
 
 
@@ -111,7 +109,7 @@ function startGame(elementDOM) {
             let id = json["id"];
             let nickname = json["nickname"];
 
-            if(id == null || nickname == null) {
+            if(id === null || nickname === null) {
                 alert("error");
                 return;
             }
@@ -125,7 +123,6 @@ function startGame(elementDOM) {
 
                 world.update();
             });
-
         });
 
     });

@@ -142,8 +142,8 @@ class Tower {
 
     destruct() {
         if(this.cache) {
-            this.world.stage.removeChild(this.cache.circle);
-            this.world.stage.removeChild(this.cache.text);
+            this.world.map.removeChild(this.cache.circle);
+            this.world.map.removeChild(this.cache.text);
         }
     }
 

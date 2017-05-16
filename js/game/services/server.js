@@ -31,6 +31,10 @@ class ServerConnect {
         this.socket.send(needSend);
     }
 
+    disconnect(){
+        this.socket.close();
+    }
+
     /**
      * @param func as function(event)
      */

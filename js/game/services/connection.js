@@ -49,6 +49,10 @@ class Connection {
         this.socket.sendData(json);
     }
 
+    disconnect(){
+        this.socket.disconnect();
+    }
+
     static parseHost(ip) {
         return "ws://" + ip.host + ":" + ip.port + ip.path;
     }
