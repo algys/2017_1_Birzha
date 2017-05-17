@@ -2,7 +2,7 @@ import ScoreBoard from './boards/score_board'
 import MenuBoard from './boards/menu_board'
 import ZoomBoard from './boards/zoom_board'
 
-class Controls{
+class GameControls{
     constructor(){
         this.scoreBoard = new ScoreBoard();
         this.menuBoard = new MenuBoard();
@@ -10,4 +10,4 @@ class Controls{
     }
 }
 
-export default Controls;
+export default GameControls;

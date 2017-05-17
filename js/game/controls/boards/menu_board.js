@@ -28,7 +28,6 @@ class MenuBoard{
 
         this.scores = new Map();
     }
-
 }
 
 export default MenuBoard;

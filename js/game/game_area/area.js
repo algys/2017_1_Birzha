@@ -148,23 +148,23 @@ class Area {
         else
             this.columnEnds.start = 0;
 
-        if(x + xCount<this.worldSize)
+        if(x + xCount<this.worldSizeW)
             this.columnEnds.end = x + xCount;
         else
-            this.columnEnds.end = this.worldSize;
+            this.columnEnds.end = this.worldSizeW;
 
         if(y - yCount>0)
             this.rowEnds.start = y - yCount;
         else
             this.rowEnds.start = 0;
 
-        if(y + yCount<this.worldSize)
+        if(y + yCount<this.worldSizeH)
             this.rowEnds.end = y + yCount;
         else
-            this.rowEnds.end = this.worldSize;
+            this.rowEnds.end = this.worldSizeH;
 
-        for(let i = 0; i<this.worldSize; i++){
-            for(let j = 0; j<this.worldSize; j++){
+        for(let i = 0; i<this.worldSizeH; i++){
+            for(let j = 0; j<this.worldSizeW; j++){
                 if(i<this.rowEnds.start || i>this.rowEnds.end+1)
                     this.cells[i][j].visible = false;
                 else if (j < this.columnEnds.start || j > this.columnEnds.end+1) {

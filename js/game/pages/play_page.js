@@ -3,7 +3,7 @@
 import User from '../game_objects/user/user';
 import Tower from '../game_objects/models/tower';
 
-import Controls from '../controls/controls';
+import Controls from '../controls/gameControls';
 
 import BasePage from './base_page';
 import Enemy from '../game_objects/enemy/enemy';
@@ -26,15 +26,14 @@ class PlayPage extends BasePage {
 
     splitUsers(array, meId) {
         let me = null;
-
         for(let user in array) {
+            array[user].color = window.userColors[(user % 4)];
             if(array[user].id === meId) {
                 me = array[user];
             } else {
                 this.enemiesData.push(array[user]);
             }
         }
-
         return me;
     }
 
@@ -43,11 +42,7 @@ class PlayPage extends BasePage {
         let perfomingPlayer = room.pid;
 
         let meData = this.splitUsers(room.players, room.meId);
-        this.user = new User(this.connection, this.world,
-            {x: meData.beginX, y: meData.beginY},
-            meData.id,
-            meData.nickname || "NONAME",
-            meData.units);
+        this.user = new User(this.connection, this.world, meData);
 
         /* if user step */
         if(perfomingPlayer === room.meId) {
@@ -57,6 +52,7 @@ class PlayPage extends BasePage {
 
         for(let index in this.enemiesData) {
             let enemyData = this.enemiesData[index];
+            debugger;
             this.enemiesObject[enemyData.id] = new Enemy(this.connection, this.world, enemyData);
             if(enemyData.id === perfomingPlayer) {
                 this.nowPerforming = this.enemiesObject[enemyData.id];
@@ -81,7 +77,6 @@ class PlayPage extends BasePage {
         controls.scoreBoard.addPlayerToScoreBoard("Alex", 13412);
         controls.scoreBoard.addPlayerToScoreBoard("Alg", 12423);
         controls.scoreBoard.addPlayerToScoreBoard("Sergey", 15352);
-        controls.scoreBoard.addPlayerToScoreBoard("Daniyar", 15352);
 
         /* code for algys */
         this.connection.addEventListen(DATATYPE_PLAYERMOVE, (json) => {
@@ -91,7 +86,6 @@ class PlayPage extends BasePage {
             let nextpid = json["nextpid"];
 
             this.nowPerforming.setPerforming(false);
-            debugger;
             if(json["pid"] === this.user.pid) {
                 /* dont draw me */
                 if(nextpid in this.enemiesObject)
@@ -101,7 +95,7 @@ class PlayPage extends BasePage {
 
                 console.log("No Draw and update!");
             } else {
-                if(nextpid === this.user.pid)
+                if (nextpid === this.user.pid)
                     this.nowPerforming = this.user;
                 else
                     this.nowPerforming = this.enemiesObject[nextpid];
@@ -113,31 +107,37 @@ class PlayPage extends BasePage {
                 let newNodes = json["newNodes"];
                 let newLinks = json["newLinks"];
 
-                valueUpdates.forEach((update)=>{
-                    let point = {
-                        x: update["x"],
-                        y: update["y"]
-                    };
-                    let newUnits = update["value"];
-                    this.world.getTowerFromMap(point).changeUnits(newUnits);
-                });
+                if (valueUpdates) {
+                    valueUpdates.forEach((update) => {
+                        let point = {
+                            x: update["x"],
+                            y: update["y"]
+                        };
+                        let newUnits = update["value"];
+                        this.world.getTowerFromMap(point).changeUnits(newUnits);
+                    });
+                }
 
-                newNodes.forEach((newNode)=>{
-                    let localPid = newNode["pid"];
-                    if(localPid === nowEnemy.pid) {
-                        nowEnemy.addNewTower(newNode);
-                    }
-                });
+                if (newNodes) {
+                    newNodes.forEach((newNode) => {
+                        let localPid = newNode["pid"];
+                        if (localPid === nowEnemy.pid) {
+                            nowEnemy.addNewTower(newNode);
+                        }
+                    });
+                }
 
-                newLinks.forEach((newLink)=>{
-                    let from = newLink["l"];
-                    let to = newLink["r"];
-                    let fromTower = this.world.getTowerFromMap(from);
-                    let toTower = this.world.getTowerFromMap(to);
-                    let pid = fromTower.client_id;
-                    if(this.enemiesObject[pid])
-                       this.enemiesObject[pid].createLink(fromTower,toTower);
-                });
+                if (newLinks) {
+                    newLinks.forEach((newLink) => {
+                        let from = newLink["l"];
+                        let to = newLink["r"];
+                        let fromTower = this.world.getTowerFromMap(from);
+                        let toTower = this.world.getTowerFromMap(to);
+                        let pid = fromTower.client_id;
+                        if (this.enemiesObject[pid])
+                            this.enemiesObject[pid].createLink(fromTower, toTower);
+                    });
+                }
             }
 
             this.nowPerforming.setPerforming(true);
@@ -190,7 +190,6 @@ class PlayPage extends BasePage {
         this.world.map.removeAllChildren();
         this.world.update();
         this.world.area.stage.removeAllChildren();
-        debugger;
 
         this.connection.disconnect();
         this.stop();

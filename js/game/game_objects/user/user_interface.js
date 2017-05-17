@@ -79,6 +79,10 @@ class UserInterface {
         let newX = pxPoint.x - this.last_mv.x , newY = pxPoint.y - this.last_mv.y;
         let newPos = this.world.area.getCellPosition(newX, newY);
 
+        if(this.currentPos.x === newPos.x && this.currentPos.y === newPos.y){
+            return;
+        }
+
         this.packCallback["addTower"](newPos);
         this.world.area.markSelectedCell(newPos.x, newPos.y);
 

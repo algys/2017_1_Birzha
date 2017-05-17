@@ -8,9 +8,18 @@ import GameObject from '../game_object';
 import Tower from '../models/tower'
 
 class User extends GameObject {
-    constructor(connection, world, point, clientId, userNick, units) {
+    constructor(connection, world, info) {
+        let point = {
+            x: info.beginX,
+            y: info.beginY
+        };
+        let clientId = info.id;
+        let userNick = info.nickname;
+        let units = info.units;
+
         super(world, clientId, userNick);
 
+        this.color = info.color;
         this.arrayMap = world.arrayMap;
         this.userInterface = new UserInterface(world, {
             "getRealPosition": this.myRealPosition.bind(this),
@@ -31,7 +40,7 @@ class User extends GameObject {
         /**************/
         this.myGraph = new GraphTree(world);
 
-        let tower = this.generateMyTower(point, units || conf.defaultStartUnit);
+        let tower = this.generateMyTower(point, units);
 
         this.mainNode = this.myGraph.addNewVertexToCurrent(tower);
         this.setTowerNode(tower, this.mainNode);
@@ -81,7 +90,8 @@ class User extends GameObject {
         let newUnits = bonusTower.units + unitsCount;
 
         /* make from bonus to user */
-        bonusTower.refreshTower(towerType.DEFAULT, newUnits, fromNode.parentNode, fromNode.client_id);
+        bonusTower.refreshTower(towerType.DEFAULT, newUnits, fromNode.parentNode, this.pid);
+        bonusTower.setUserColor(this.color);
         /***************************/
 
         this.world.addTowerToMap(bonusTower.point, bonusTower);
@@ -155,7 +165,7 @@ class User extends GameObject {
     generateMyTower(point, units) {
         let tower = new Tower(this.world, point.x, point.y, towerType.DEFAULT,
             units);
-
+        tower.setUserColor(this.color);
         tower.client_id = this.pid;
         return tower;
     }

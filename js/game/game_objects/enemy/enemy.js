@@ -13,6 +13,8 @@ class Enemy extends GameObject {
 
         let point = {x: info.beginX, y: info.beginY};
 
+        this.color = info.color;
+
         this.connection = connection;
 
         this.enemyGraph = new GraphTree(world);
@@ -36,10 +38,11 @@ class Enemy extends GameObject {
             units);
 
         tower.client_id = this.pid;
+        tower.setUserColor(this.color);
+
         tower.draw();
 
-        let newNode = this.enemyGraph.addNewNode(tower);
-        tower.parentNode = newNode;
+        tower.parentNode = this.enemyGraph.addNewNode(tower);
 
         return tower;
     }
@@ -50,7 +53,6 @@ class Enemy extends GameObject {
             y : newNodeInfo.y
         };
         let unitsCount = newNodeInfo.value;
-        debugger;
         if(this.world.getTowerFromMap(point)){
             let to = this.world.getTowerFromMap(point);
             to.destruct();

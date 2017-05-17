@@ -40,7 +40,7 @@ window.conf = {
           {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
           {host: "172.16.94.65", port: 8081, path: "/game"}
     ],
-    baseIP: 4,
+    baseIP: 6,
 
     countUsersInRoom: 2,
 
@@ -59,6 +59,13 @@ window.towerType = {
     DEFAULT: 0,
     BONUS: 1,
     ENEMY: 2
+};
+
+window.userColors = {
+    0: "red",
+    1: "green",
+    2: "blue",
+    3: "yellow"
 };
 
 function loadResourse(callback) {

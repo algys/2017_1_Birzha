@@ -9,6 +9,8 @@ class Tower {
         this.realY = pxPoint.y;
 
         this.typeOfTower = typeOfTower;
+        this.userColor = null;
+
         this.cache = null;
 
         this.units = units;
@@ -63,15 +65,14 @@ class Tower {
     }
 
     setPerforming(flag) {
-        // ;
 
-        if(this.cache == null)
+        if(this.cache === null)
             return;
 
+        let style = this.getStyle();
         if(flag)
-            Tower.setShapeTower(this.cache.circle.graphics, "#00ff00", true);
+            Tower.setShapeTower(this.cache.circle.graphics, style.color, true);
         else {
-            let style = this.getStyle();
             Tower.setShapeTower(this.cache.circle.graphics, style.color, style.fill);
         }
 
@@ -83,7 +84,7 @@ class Tower {
 
         switch(this.typeOfTower) {
             case towerType.DEFAULT:
-                color = "#ff0000";
+                color = this.userColor;
                 fill = false;
                 break;
             case towerType.BONUS:
@@ -91,7 +92,7 @@ class Tower {
                 fill = true;
                 break;
             case towerType.ENEMY:
-                color = "#000000";
+                color = this.userColor;
                 fill = false;
                 break;
             default:
@@ -133,7 +134,7 @@ class Tower {
     }
 
     setTowerCoordinates(x, y) {
-        if(this.cache == null)
+        if(this.cache === null)
             return;
 
         this.cache.circle.x = x;
@@ -155,7 +156,7 @@ class Tower {
     }
 
     drawStandartImpl(color, fill) {
-        if(this.cache == null) {
+        if(this.cache === null) {
             this.cache = {};
 
             let shape = new createjs.Shape();
@@ -176,6 +177,10 @@ class Tower {
 
         this.setTextCoordinates(this.realX, this.realY);
         this.setTowerCoordinates(this.realX, this.realY);
+    }
+
+    setUserColor(color){
+        this.userColor = color;
     }
 }
 
