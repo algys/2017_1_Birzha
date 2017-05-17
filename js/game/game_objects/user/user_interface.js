@@ -24,6 +24,16 @@ class UserInterface {
         this.currentPos = this.startPos;
     }
 
+    checkToMove(cellPos){
+        if(Math.abs(cellPos.x - this.currentPos.x) > 2)
+            return false;
+        if(Math.abs(cellPos.y - this.currentPos.y) > 2)
+            return false;
+
+        return Math.abs(cellPos.x - this.currentPos.x) *
+            Math.abs(cellPos.y - this.currentPos.y) !== 2 * 2;
+    }
+
     eventMove(event) {
         let pxPoint = this.world.area.getPixelPoint(this.currentPos.x, this.currentPos.y);
         this.last_mv = this.last_mv || {x: 0, y: 0};
@@ -38,19 +48,18 @@ class UserInterface {
             return;
 
         let cellPos = this.world.area.getCellPosition(pxPoint.x - mv.x, pxPoint.y - mv.y);
-        let fullLength = conf.rectSize * 2 + conf.borderSize * 6;
 
         this.probablyCircle.x = pxPoint.x - mv.x;
         this.probablyCircle.y = pxPoint.y - mv.y;
 
         this.probablyLine.graphics.clear();
         if(this.currentMode === 'moving') {
-            if(fullLength < Math.abs(mv.x) || (fullLength < Math.abs(mv.y))) {
+            if(!this.checkToMove(cellPos)) {
                 this.world.area.markCurrentCell(cellPos.x, cellPos.y, 1);
             } else
                 this.world.area.markCurrentCell(cellPos.x, cellPos.y, 0);
 
-            this.probablyLine.graphics.setStrokeStyle(1).beginStroke("#00ff00");
+            this.probablyLine.graphics.setStrokeStyle(1).beginStroke(this.co);
             this.probablyLine.graphics.moveTo(pxPoint.x, pxPoint.y);
             this.probablyLine.graphics.lineTo(this.probablyCircle.x, this.probablyCircle.y);
             this.probablyLine.graphics.endStroke();
@@ -71,13 +80,12 @@ class UserInterface {
     }
 
     putNewVertex() {
-        let fullLength = conf.rectSize * 2 + conf.borderSize * 6;
-        if(fullLength < Math.abs(this.last_mv.x) || (fullLength < Math.abs(this.last_mv.y))) {
-            return;
-        }
         let pxPoint = this.world.area.getPixelPoint(this.currentPos.x, this.currentPos.y);
         let newX = pxPoint.x - this.last_mv.x , newY = pxPoint.y - this.last_mv.y;
         let newPos = this.world.area.getCellPosition(newX, newY);
+        if(!this.checkToMove(newPos)) {
+            return;
+        }
 
         if(this.currentPos.x === newPos.x && this.currentPos.y === newPos.y){
             return;
@@ -96,7 +104,6 @@ class UserInterface {
     chooseNewVertex() {
         let newX = this.probablyCircle.x, newY = this.probablyCircle.y;
         let newPos = this.world.area.getCellPosition(newX, newY);
-        let i = this.packCallback['getClientId']();
         if(this.world.arrayMap[newPos.x][newPos.y]) {
             if (this.world.arrayMap[newPos.x][newPos.y].client_id !== this.packCallback['getClientId']()) {
                 return;
@@ -142,7 +149,6 @@ class UserInterface {
         if(event.type === 'mousemove' && this.pointerLockStatus){
             this.eventMove(event);
         }
-
     }
 }
 

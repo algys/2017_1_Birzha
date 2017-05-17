@@ -40,7 +40,7 @@ window.conf = {
           {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
           {host: "172.16.94.65", port: 8081, path: "/game"}
     ],
-    baseIP: 6,
+    baseIP: 4,
 
     countUsersInRoom: 2,
 
@@ -52,7 +52,7 @@ window.conf = {
 
     userSize: 5,
     radiusTower: 28,
-    betweenTowersPadding: 15
+    betweenTowersPadding: 0
 };
 
 window.towerType = {
@@ -131,7 +131,6 @@ function startGame(elementDOM) {
                 world.update();
             });
         });
-
     });
 }
 
@@ -143,7 +142,13 @@ function debugGame(elementDOM) {
     let world = new World(elementDOM, area);
 
     const iAmReady = () => {
-        let user = new User(null, world, {x: 10, y: 10}, 1, "noname", 100);
+        menuPage.stopPage();
+        let user = new User(null, world, {
+            beginX: 10, beginY: 10, id: 1,
+            nickname: "noname", units: 100,
+            color: "green"
+        });
+
         user.setPerforming(true);
     };
 

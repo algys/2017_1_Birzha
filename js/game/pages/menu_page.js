@@ -54,7 +54,7 @@ class MenuPage extends BasePage {
             createjs.Ticker.setInterval(10);
             createjs.Ticker.setFPS(60);
         } else {
-            createjs.Ticker.removeEventListener("tick", this.buttonAnimate);
+            createjs.Ticker.removeAllEventListeners();
             createjs.Ticker.paused = true;
         }
         this.world.update();

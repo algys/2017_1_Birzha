@@ -152,7 +152,7 @@ class Tower {
         if(fill)
             graphics.clear().beginFill(color).drawCircle(0, 0, conf.radiusTower);
         else
-            graphics.clear().beginStroke(color).drawCircle(0, 0, conf.radiusTower)
+            graphics.clear().setStrokeStyle(3).beginStroke(color).drawCircle(0, 0, conf.radiusTower)
     }
 
     drawStandartImpl(color, fill) {

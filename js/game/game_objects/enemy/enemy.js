@@ -17,7 +17,7 @@ class Enemy extends GameObject {
 
         this.connection = connection;
 
-        this.enemyGraph = new GraphTree(world);
+        this.enemyGraph = new GraphTree(world, this.color);
 
         let tower = this.generateEnemyTower(point, info.units);
 

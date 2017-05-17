@@ -1,4 +1,6 @@
 window.mainConfiguration = {
-    debugMode: false,
-    needAppCache: false
+    debugMode: true,
+    needAppCache: false,
+
+    pingPongTime: 10000
 };

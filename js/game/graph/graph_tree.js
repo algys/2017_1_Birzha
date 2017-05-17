@@ -1,7 +1,7 @@
 import Tree from './tree';
 
 class GraphTree {
-    constructor(map) {
+    constructor(map, color) {
         this.world = map;
 
         this.tree = new Tree;
@@ -9,6 +9,7 @@ class GraphTree {
 
         this.shapes = new Map();
         this.graphLine = null;
+        this.lineColor = color;
     }
 
     get getTree() {
@@ -69,9 +70,9 @@ class GraphTree {
         let currentNode = this.tree.rootNode;
         let marker = new Set();
 
-        this.graphLine = this.graphLine || this.world.newLine("red");
+        this.graphLine = this.graphLine || this.world.newLine(this.lineColor);
         this.graphLine.graphics.clear();
-        this.graphLine.graphics.setStrokeStyle(1).beginStroke("#00ff00");
+        this.graphLine.graphics.setStrokeStyle(3).beginStroke(this.lineColor);
 
         this.go = (function (current, marker) {
             if(current === null){

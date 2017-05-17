@@ -44,6 +44,12 @@ class PlayPage extends BasePage {
         let meData = this.splitUsers(room.players, room.meId);
         this.user = new User(this.connection, this.world, meData);
 
+        // connection.addEventListenDestroy(() => {
+        //
+        // });
+
+        // connection.addEventPingPong();
+
         /* if user step */
         if(perfomingPlayer === room.meId) {
             this.nowPerforming = this.user;

@@ -38,7 +38,8 @@ class User extends GameObject {
         //     console.log("My nick: " + json["nickname"]);
         // });
         /**************/
-        this.myGraph = new GraphTree(world);
+
+        this.myGraph = new GraphTree(world, this.color);
 
         let tower = this.generateMyTower(point, units);
 
