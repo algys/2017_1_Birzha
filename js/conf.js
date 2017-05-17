@@ -1,4 +1,4 @@
 window.mainConfiguration = {
-    debugMode: false,
+    debugMode: true,
     needAppCache: false
 };
