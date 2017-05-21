@@ -28,12 +28,80 @@ body {
   height: 100%;
   background-color: #222;
 }
+
 body {
   color: #fff;
   text-align: center;
   text-shadow: 0 1px 3px rgba(0,0,0,.5);
   box-shadow: inset 0 0 100px rgba(0,0,0,.5);
 }
+
+/* Center div */
+
+.div-container {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+  margin: 20px auto 40px;
+  clear: both;
+}
+
+.div-center {
+  width: 50%;
+  height: 400px;
+
+  z-index: 999;
+
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+
+  background: #5bc0de;
+  padding: 20px;
+
+  overflow: hidden;
+}
+
+/* menu room */
+.cyclic-menu {}
+
+.cyclic-rooms-buttons {
+  height: 50px;
+  padding: 10px;
+}
+
+.cyclic-rooms-buttons > button {
+  margin: 5px;
+}
+
+.cyclic-menu-room {
+  display: block;
+  position: relative;
+
+  cursor: pointer;
+  width: 100%;
+  height: 80px;
+
+  background: #2b542c;
+  padding: 10px;
+}
+
+.cyclic-menu-room:hover {
+  background: #5cb85c;
+}
+
+.cyclic-menu-priority {
+  border: #67b168 solid 4px;
+}
+
+.cyclic-menu-room-count {
+  display: inline-block;
+
+  float: right;
+}
+
+/**************/
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {

@@ -18,9 +18,11 @@ window.DATATYPE_NEWBONUS = "DATATYPE_NEWBONUS";
 window.DATATYPE_ERROR = "DATATYPE_ERROR";
 window.DATATYPE_HELLO = "DATATYPE_HELLO";
 window.DATATYPE_ROOM_DESTRUCT = "DATATYPE_ROOM_DESTRUCTION";
+window.DATATYPE_ROOMMANAGER_UPDATE = "DATATYPE_ROOMMANAGER_UPDATE";
 
-window.ACTION_GIVE_ME_ROOM = "ACTION_GIVE_ME_ROOM";
-window.ACTION_GAME_MOVE = "ACTION_GAME_MOVE";
+window.READY_FOR_ROOM_SEARCH = "ACTION_READY_FOR_ROOM_SEARCH";
+window.READY_FOR_GAME_START = "ACTION_READY_FOR_GAME_START";
+window.GAME_UPDATE_MY_MOVE = "ACTION_GAME_MOVE";
 
 window.RES_OK = 0;
 window.RES_ROLLBACK = 1;
@@ -31,16 +33,15 @@ window.STATUS_PLAYING = "STATUS_PLAYING";
 window.STATUS_READY = "STATUS_READY";
 
 window.conf = {
-    ip: [ {host: "172.16.84.151", port: 8081, path: "/game "},
+    ip: [ {host: "172.16.83.124", port: 8081, path: "/game "},
           {host: "192.168.43.107", port: 8081, path: "/game"},
           {host: "172.16.90.2", port: 8081, path: "/game"},
           {host: "172.20.10.4", port: 8081, path: "/game"},
           {host: "localhost", port: 8081, path: "/game"},
           {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
-          {host: "172.16.94.65", port: 8081, path: "/game"},
-          {host: "scaptaincap.asuscomm.com", port: 8081, path: "/game"}
+          {host: "172.16.94.65", port: 8081, path: "/game"}
     ],
-    baseIP: 3,
+    baseIP: 4,
 
     countUsersInRoom: 2,
 
@@ -83,60 +84,65 @@ function startGame(elementDOM) {
     let connectionService = null;
     let room = null;
 
-    const startGame = function () {
+    const iAmReady = function (countChoose) {
         if(room === null) {
             alert("room ~ null");
             return;
         }
 
-  //      room.iAmReady();
+        room.iAmReady(countChoose);
     };
 
     let area = new Area(elementDOM);
     let world = new World(elementDOM, area);
 
+    // No connection
+    let menuPage = new MenuPage(world, iAmReady);
 
-    loadResourse((result) => {
-        console.log(result);
-    });
-
-    connectionService = new Connection((status) => {
-        if(status === RES_ERROR) {
-            alert("error connect server!"); // error
-            return;
-        }
-
-        let menuPage = new MenuPage(world, connectionService );
-        let playPage = new PlayPage(world, connectionService, null); // TODO loading
-
-        loadResourse((result) => {
-            console.log(result);
-            menuPage.startPage(result);
-        });
-
-        let ifstop = ()=>{
-            menuPage.startPage();
-        };
-
-        connectionService.addEventListen(DATATYPE_HELLO, (json) => {
-            let id = json["id"];
-            let nickname = json["nickname"];
-
-            if(id === null || nickname === null) {
-                alert("error");
+    let startConnect = (result) => {
+        connectionService = new Connection((status) => {
+            if(status === RES_ERROR) {
+                alert("error connect server!"); // error
                 return;
             }
 
-            console.log("start after hello");
-            room = new Room(connectionService, menuPage, id, nickname, (room) => {
-                room.deleteListenRoomInfo();
-                menuPage.stopPage(); // destruct room choose
+            let playPage = new PlayPage(world, connectionService, null); // TODO loading
 
-                playPage.startPage(room, ifstop);
+            let ifstop = () => {
+                /* stop */
+                menuPage.startPage();
+            };
 
-                world.update();
+            connectionService.addEventListen(DATATYPE_HELLO, (json) => {
+                let id = json["id"];
+                let nickname = json["nickname"];
+
+                if(id === null || nickname === null) {
+                    alert("error");
+                    return;
+                }
+
+                console.log("start after hello");
+                menuPage.startPage(result);
+                menuPage.startRoomChoose(connectionService);
+
+                room = new Room(connectionService, menuPage, id, nickname, (room) => {
+                    debugger;
+                    room.deleteListenRoomInfo();
+                    menuPage.stopPage(); // destruct room choose
+
+                    playPage.startPage(room, ifstop);
+
+                    world.update();
+                });
+
             });
         });
+    };
+
+    loadResourse((result) => {
+        console.log(result);
+        startConnect(result);
     });
 }
 

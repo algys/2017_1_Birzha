@@ -37,8 +37,12 @@ class Room {
         this.connection.deleteListen(DATATYPE_ROOMINFO);
     }
 
-    iAmReady() {
-        this.connection.send();
+    iAmReady(countChoose) {
+        // TODO update api
+        this.connection.send(GIVE_ME_ROOM,
+            (countChoose) ? { "roomCapacity": countChoose } : {}
+        );
+
         this.waitPage.setEnableRotation(true);
     }
 
