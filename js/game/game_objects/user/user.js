@@ -27,7 +27,8 @@ class User extends GameObject {
             "setCurrentNode": this.setCurrentNode.bind(this),
             "getClientId": () => { return this.pid; },
             "getPerforming": () => { return this.performing },
-            "getMyColor": () => { return this.color }
+            "getMyColor": () => { return this.color },
+            "getTower": () => { return this.currentNode.data; }
         }, point);
 
         this.userAction = new UserAction(connection);
@@ -116,19 +117,16 @@ class User extends GameObject {
         this.userAction.createTown(userNode.data.point, enemyNode.data.point, unitsCount);
     }
 
-    addNewTower(pointNewTower) {
+    addNewTower(pointNewTower, units) {
         let placeTower = this.getFromMap(pointNewTower);
         this.setPerforming(false); // TODO if error
 
         if (placeTower === null) {
-            let units = parseInt(this.currentNode.data.units / 2); // TODO normal count
             this.currentNode = this.playerMoveFree(this.currentNode, pointNewTower, units);
         } else { // TODO work fight
             if (placeTower.constructor.name === "NodeImpl") {
-                let units = parseInt(this.currentNode.data.units / 2);
                 this.playerMoveFight(this.currentNode, placeTower.parentNode, units);
             } else {
-                let units = parseInt(this.currentNode.data.units / 2); // TODO normal count
                 this.currentNode = this.playerMoveBonus(this.currentNode, placeTower, units);
             }
         }
@@ -216,7 +214,6 @@ class User extends GameObject {
         this.waitUnits = null;
         this.waitNode = null;
     }
-
 }
 
 export default User;

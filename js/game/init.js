@@ -52,7 +52,10 @@ window.conf = {
 
     userSize: 5,
     radiusTower: 28,
-    betweenTowersPadding: 0
+    betweenTowersPadding: 0,
+    paddingHintX: 40,
+    paddingHintY: 40
+
 };
 
 window.towerType = {

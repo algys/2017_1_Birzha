@@ -140,8 +140,8 @@ class PlayPage extends BasePage {
                 this.user.acceptMove(json);
 
             if(scores) {
-                if(Object.stringify(lastScores) !== Object.stringify(scores)) {
-                    controls.clear();
+                if(JSON.stringify(lastScores) !== JSON.stringify(scores)) {
+                    controls.scoreBoard.clear();
                     scores.forEach((score) => {
                         let nickname;
                         if (score.pid === this.user.pid)
