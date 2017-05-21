@@ -250,7 +250,6 @@ class UserInterface {
                 this.eventMove(event); // PASS STATE_CHOOSE_NODE AND STATE_DO_STEP, STATE_CHOOSE_UNITS
 
                 if(this.currentMode.typeState === STATE_CHOOSE_UNITS) {
-                    debugger;
                     let realPoint = this.getCurrentMousePosition();
                     this.scrollBar.setPosition(realPoint.x, realPoint.y);
                     // let unitsFromthis.currentMode.data.currentTower.units;
@@ -284,7 +283,6 @@ class UserInterface {
                 });
 
             } else if(event.type === 'mouseup' && this.currentMode.typeState === STATE_CHOOSE_UNITS) {
-                debugger;
                 this.putNewVertex(this.currentMode.data.wasRealPosition, this.currentMode.data.finalUnits);
 
                 this.scrollBar.hide();

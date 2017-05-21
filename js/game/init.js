@@ -20,9 +20,8 @@ window.DATATYPE_HELLO = "DATATYPE_HELLO";
 window.DATATYPE_ROOM_DESTRUCT = "DATATYPE_ROOM_DESTRUCTION";
 window.DATATYPE_ROOMMANAGER_UPDATE = "DATATYPE_ROOMMANAGER_UPDATE";
 
-window.READY_FOR_ROOM_SEARCH = "ACTION_READY_FOR_ROOM_SEARCH";
-window.READY_FOR_GAME_START = "ACTION_READY_FOR_GAME_START";
-window.GAME_UPDATE_MY_MOVE = "ACTION_GAME_MOVE";
+window.ACTION_GIVE_ME_ROOM = "ACTION_GIVE_ME_ROOM";
+window.ACTION_GAME_MOVE = "ACTION_GAME_MOVE";
 
 window.RES_OK = 0;
 window.RES_ROLLBACK = 1;
@@ -41,7 +40,7 @@ window.conf = {
           {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
           {host: "172.16.94.65", port: 8081, path: "/game"}
     ],
-    baseIP: 4,
+    baseIP: 3,
 
     countUsersInRoom: 2,
 
@@ -127,7 +126,6 @@ function startGame(elementDOM) {
                 menuPage.startRoomChoose(connectionService);
 
                 room = new Room(connectionService, menuPage, id, nickname, (room) => {
-                    debugger;
                     room.deleteListenRoomInfo();
                     menuPage.stopPage(); // destruct room choose
 

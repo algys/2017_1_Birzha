@@ -39,7 +39,7 @@ class Room {
 
     iAmReady(countChoose) {
         // TODO update api
-        this.connection.send(GIVE_ME_ROOM,
+        this.connection.send(ACTION_GIVE_ME_ROOM,
             (countChoose) ? { "roomCapacity": countChoose } : {}
         );
 
