@@ -31,8 +31,6 @@ class Room {
 
             console.log("Get [room.js]: " + roomId);
         });
-
-        this.connection.send(READY_FOR_ROOM_SEARCH);
     }
 
     deleteListenRoomInfo() {
@@ -40,7 +38,7 @@ class Room {
     }
 
     iAmReady() {
-        this.connection.send(READY_FOR_GAME_START);
+        this.connection.send();
         this.waitPage.setEnableRotation(true);
     }
 

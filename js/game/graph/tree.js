@@ -20,6 +20,15 @@ class Tree {
         from.nextNode.push(to);
     }
 
+    removeNode(removedNode){
+        removedNode.nextNode.forEach((adjNode,i)=>{
+           removedNode.nextNode[i].nextNode = adjNode.nextNode.filter((item)=>{
+              return (item.data.pointX !== removedNode.data.pointX ||
+                        item.data.pointY !== removedNode.data.pointY)
+           });
+        });
+    }
+
     get root(){
         return this.rootNode;
     }

@@ -123,7 +123,6 @@ class World {
     }
 
     setZoom(zoom){
-        ;
         this.map.scaleX = this.map.scaleY = zoom;
         this.area.world.scaleX = this.area.world.scaleY = zoom;
      //   this.stage.canvas.style.zoom = zoom;
@@ -144,6 +143,11 @@ class World {
 
     getTowerFromMap(point){
         return this.arrayMap[point.x][point.y];
+    }
+
+    removeTowerFromMap(point){
+        this.arrayMap[point.x].splice(point.y, 1);
+        this.area.markSelectedCell(point.x, point.y, false);
     }
 }
 

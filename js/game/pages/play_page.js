@@ -9,7 +9,7 @@ import BasePage from './base_page';
 import Enemy from '../game_objects/enemy/enemy';
 
 class PlayPage extends BasePage {
-    constructor(world, connection, resource, router) {
+    constructor(world, connection) {
         super(world);
 
         this.enemiesData = [];
@@ -18,8 +18,6 @@ class PlayPage extends BasePage {
         this.user = null;
 
         this.connection = connection;
-        this.resource = resource;
-        this.router = router;
 
         this.nowPerforming = null;
     }
@@ -37,20 +35,12 @@ class PlayPage extends BasePage {
         return me;
     }
 
-    startPage(room, ifstop) {
-        this.stop = ifstop;
+    startPage(room) {
         let perfomingPlayer = room.pid;
 
         let meData = this.splitUsers(room.players, room.meId);
         this.user = new User(this.connection, this.world, meData);
 
-        // connection.addEventListenDestroy(() => {
-        //
-        // });
-
-        // connection.addEventPingPong();
-
-        /* if user step */
         if(perfomingPlayer === room.meId) {
             this.nowPerforming = this.user;
             this.user.setPerforming(true);
@@ -58,7 +48,6 @@ class PlayPage extends BasePage {
 
         for(let index in this.enemiesData) {
             let enemyData = this.enemiesData[index];
-            debugger;
             this.enemiesObject[enemyData.id] = new Enemy(this.connection, this.world, enemyData);
             if(enemyData.id === perfomingPlayer) {
                 this.nowPerforming = this.enemiesObject[enemyData.id];
@@ -80,68 +69,86 @@ class PlayPage extends BasePage {
         });
 
         let controls = new Controls();
-        controls.scoreBoard.addPlayerToScoreBoard("Alex", 13412);
-        controls.scoreBoard.addPlayerToScoreBoard("Alg", 12423);
-        controls.scoreBoard.addPlayerToScoreBoard("Sergey", 15352);
+        let lastScores = null;
 
         /* code for algys */
         this.connection.addEventListen(DATATYPE_PLAYERMOVE, (json) => {
-            if(json["result"] !== "ACCEPT_OK") // TODO make fight
-                return;
-
             let nextpid = json["nextpid"];
+            let pid = json["pid"];
+            let result = json["result"];
 
             this.nowPerforming.setPerforming(false);
-            if(json["pid"] === this.user.pid) {
-                /* dont draw me */
-                if(nextpid in this.enemiesObject)
-                    this.nowPerforming = this.enemiesObject[json["nextpid"]];
-                else
-                    alert("wtf!");
+            if (nextpid === this.user.pid)
+                this.nowPerforming = this.user;
+            else
+                this.nowPerforming = this.enemiesObject[nextpid];
 
-                console.log("No Draw and update!");
-            } else {
-                if (nextpid === this.user.pid)
-                    this.nowPerforming = this.user;
-                else
-                    this.nowPerforming = this.enemiesObject[nextpid];
+            console.log("Draw !");
 
-                console.log("Draw: " + this.enemiesObject[json["pid"]]);
+            let valueUpdates = json["valueUpdate"];
+            let newNodes = json["newNodes"];
+            let newLinks = json["newLinks"];
+            let removedNodes = json["removedNodes"];
+            let scores = json["scores"];
 
-                let nowEnemy = this.enemiesObject[json["pid"]];
-                let valueUpdates = json["valueUpdate"];
-                let newNodes = json["newNodes"];
-                let newLinks = json["newLinks"];
+            if (removedNodes) {
+                removedNodes.forEach((removedNode) => {
+                    let pid = this.world.getTowerFromMap(removedNode).client_id;
+                    if (pid === this.user.pid)
+                        this.user.removeNode(removedNode);
+                    else
+                        this.enemiesObject[pid].removeNode(removedNode);
+                });
+            }
 
-                if (valueUpdates) {
-                    valueUpdates.forEach((update) => {
-                        let point = {
-                            x: update["x"],
-                            y: update["y"]
-                        };
-                        let newUnits = update["value"];
+            if (valueUpdates) {
+                valueUpdates.forEach((update) => {
+                    let point = {
+                        x: update["x"],
+                        y: update["y"]
+                    };
+                    let newUnits = update["value"];
+                    let tower = this.world.getTowerFromMap(point);
+                    let pid = tower.client_id;
+                    if(pid !== this.user.pid)
                         this.world.getTowerFromMap(point).changeUnits(newUnits);
-                    });
-                }
+                });
+            }
 
-                if (newNodes) {
-                    newNodes.forEach((newNode) => {
-                        let localPid = newNode["pid"];
-                        if (localPid === nowEnemy.pid) {
-                            nowEnemy.addNewTower(newNode);
-                        }
-                    });
-                }
+            if (newNodes) {
+                newNodes.forEach((newNode) => {
+                    let pid = newNode["pid"];
+                    if (pid !== this.user.pid) {
+                        this.enemiesObject[pid].addNewTower(newNode);
+                    }
+                });
+            }
 
-                if (newLinks) {
-                    newLinks.forEach((newLink) => {
-                        let from = newLink["l"];
-                        let to = newLink["r"];
-                        let fromTower = this.world.getTowerFromMap(from);
-                        let toTower = this.world.getTowerFromMap(to);
-                        let pid = fromTower.client_id;
-                        if (this.enemiesObject[pid])
-                            this.enemiesObject[pid].createLink(fromTower, toTower);
+            if (newLinks) {
+                newLinks.forEach((newLink) => {
+                    let from = newLink["l"];
+                    let to = newLink["r"];
+                    let fromTower = this.world.getTowerFromMap(from);
+                    let toTower = this.world.getTowerFromMap(to);
+                    let pid = fromTower.client_id;
+                    if (pid !== this.user.pid)
+                        this.enemiesObject[pid].createLink(fromTower, toTower);
+                });
+            }
+
+            if(result === "ACCEPT_WIN" || result === "ACCEPT_LOSE")
+                this.user.acceptMove(json);
+
+            if(scores) {
+                if(Object.stringify(lastScores) !== Object.stringify(scores)) {
+                    controls.clear();
+                    scores.forEach((score) => {
+                        let nickname;
+                        if (score.pid === this.user.pid)
+                            nickname = this.user.nickName;
+                        else
+                            nickname = this.enemiesObject[score.pid].nickName;
+                        controls.scoreBoard.addPlayerToScoreBoard(nickname, score.score);
                     });
                 }
             }
@@ -164,29 +171,22 @@ class PlayPage extends BasePage {
         /* event status server and pid*/
         this.connection.addEventListen(DATATYPE_ROOMINFO, (json) => {
             let status = json["status"];
-            /* while exit and wait new game */
-            if(status === STATUS_CREATING) {
-                // TODO to menu
-                // alert("exit game and new room");
-                return;
-            } else {
-                if (status === STATUS_PLAYING && "pid" in json) {
-                    let pid = json["pid"];
 
-                    if (pid === this.user.pid) {
-                        this.nowPerforming = this.user;
-                    } else if (pid in this.enemiesObject) {
-                        this.nowPerforming = this.enemiesObject[pid];
-                    }
+            if (status === STATUS_PLAYING && "pid" in json) {
+                let pid = json["pid"];
 
-                    this.nowPerforming.setPerforming(true);
-                    this.world.update();
-
-                } else {
-                    alert("wtf!!!!");
+                if (pid === this.user.pid) {
+                    this.nowPerforming = this.user;
+                } else if (pid in this.enemiesObject) {
+                    this.nowPerforming = this.enemiesObject[pid];
                 }
+                this.nowPerforming.setPerforming(true);
+                this.world.update();
+            } else {
+                alert("wtf!!!!");
             }
         });
+
         window.onbeforeunload = ()=>{
             this.connection.disconnect();
         };

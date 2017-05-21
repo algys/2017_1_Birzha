@@ -22,6 +22,7 @@ class UserInterface {
         }, false);
 
         this.currentPos = this.startPos;
+        this.color = this.packCallback["getMyColor"]();
     }
 
     checkToMove(cellPos){
@@ -59,7 +60,7 @@ class UserInterface {
             } else
                 this.world.area.markCurrentCell(cellPos.x, cellPos.y, 0);
 
-            this.probablyLine.graphics.setStrokeStyle(1).beginStroke(this.co);
+            this.probablyLine.graphics.setStrokeStyle(1).beginStroke(this.color);
             this.probablyLine.graphics.moveTo(pxPoint.x, pxPoint.y);
             this.probablyLine.graphics.lineTo(this.probablyCircle.x, this.probablyCircle.y);
             this.probablyLine.graphics.endStroke();
@@ -92,7 +93,7 @@ class UserInterface {
         }
 
         this.packCallback["addTower"](newPos);
-        this.world.area.markSelectedCell(newPos.x, newPos.y);
+        this.world.area.markSelectedCell(newPos.x, newPos.y, true);
 
         this.world.update();
 
@@ -115,7 +116,7 @@ class UserInterface {
         this.probablyCircle.y = newY;
         this.packCallback['setCurrentNode'](newPos);
 
-        this.world.area.markSelectedCell(newPos.x, newPos.y);
+        this.world.area.markSelectedCell(newPos.x, newPos.y, true);
 
         this.world.update();
 

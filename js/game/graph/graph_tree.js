@@ -47,6 +47,12 @@ class GraphTree {
         return this.tree.addNode(data, null);
     }
 
+    removeNode(point){
+        let removedTower = this.world.getTowerFromMap(point);
+        this.tree.removeNode(removedTower.parentNode);
+        removedTower.destruct();
+    }
+
     destruct() {
         this.world.stage.removeChild(this.graphLine);
         console.log(this.shapes);

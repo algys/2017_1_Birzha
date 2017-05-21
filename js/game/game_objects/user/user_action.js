@@ -14,7 +14,7 @@ class UserAction {
         if(!this.connection)
             return;
 
-        this.connection.send(GAME_UPDATE_MY_MOVE, {
+        this.connection.send(ACTION_GAME_MOVE, {
             move: {
                 xfrom: from.x,
                 yfrom: from.y,

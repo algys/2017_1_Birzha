@@ -74,6 +74,12 @@ class Enemy extends GameObject {
         this.enemyGraph.addNewLink(from.parentNode, to.parentNode);
         this.drawObject();
     }
+
+    removeNode(point){
+        debugger;
+        this.enemyGraph.removeNode(point);
+        this.drawObject();
+    }
 }
 
 export default Enemy;

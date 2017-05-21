@@ -1,4 +1,4 @@
-import './conf'
+import './conf/conf'
 
 import Router from './router';
 

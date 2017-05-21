@@ -1,18 +1,14 @@
 import BasePage from './base_page';
 
 class MenuPage extends BasePage {
-    constructor(world, callBackIfRun) {
+    constructor(world, connection) {
         super(world);
-        this.callbackIfRun = callBackIfRun;
 
         this.children = [];
 
         this.buttonMenu = null;
-        this.menuShapes = null;
-
-        this.ticker = 0;
-
-        this.enableRotation = false;
+        this.listenerId = null;
+        this.connection = connection;
     }
 
     startPage(resource) {
@@ -36,8 +32,14 @@ class MenuPage extends BasePage {
             this.world.update();
         };
 
+        this.listenerId = this.connection.addEventListen(DATATYPE_ROOMINFO, (json)=>{
+            if(json["status"] === STATUS_PLAYING){
+                this.stopPage();
+            }
+        });
+
         const onClickRun = (event) => {
-            this.callbackIfRun();
+            this.connection.send(ACTION_GIVE_ME_ROOM);
         };
 
         this.buttonMenu.on('click', onClickRun.bind(this));
@@ -46,6 +48,8 @@ class MenuPage extends BasePage {
     stopPage() {
         this.world.map.removeChild(this.buttonMenu);
         this.world.update();
+        this.connection.deleteListenIndex(DATATYPE_ROOMINFO, this.listenerId);
+        this.listenerId = null;
     }
 
     setEnableRotation(flag) {

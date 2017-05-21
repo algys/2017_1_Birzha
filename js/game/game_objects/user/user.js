@@ -26,7 +26,8 @@ class User extends GameObject {
             "addTower": this.addNewTower.bind(this),
             "setCurrentNode": this.setCurrentNode.bind(this),
             "getClientId": () => { return this.pid; },
-            "getPerforming": () => { return this.performing }
+            "getPerforming": () => { return this.performing },
+            "getMyColor": () => { return this.color }
         }, point);
 
         this.userAction = new UserAction(connection);
@@ -52,7 +53,7 @@ class User extends GameObject {
         this.drawObject();
 
         //update camera
-        this.world.area.markSelectedCell(point.x, point.y);
+        this.world.area.markSelectedCell(point.x, point.y, true);
         let pxPoint = this.world.area.getPixelPoint(point.x, point.y);
         this.world.setOffsetForCenter(pxPoint.x, pxPoint.y);
         this.world.area.world.stage.update();
@@ -110,14 +111,16 @@ class User extends GameObject {
     }
 
     playerMoveFight(userNode, enemyNode, unitsCount) {
-        this.playerMoveFree(userNode, enemyNode.data.point, unitsCount);
+        this.waitNode = userNode;
+        this.waitUnits = unitsCount;
+        this.userAction.createTown(userNode.data.point, enemyNode.data.point, unitsCount);
     }
 
     addNewTower(pointNewTower) {
         let placeTower = this.getFromMap(pointNewTower);
         this.setPerforming(false); // TODO if error
 
-        if (placeTower == null) {
+        if (placeTower === null) {
             let units = parseInt(this.currentNode.data.units / 2); // TODO normal count
             this.currentNode = this.playerMoveFree(this.currentNode, pointNewTower, units);
         } else { // TODO work fight
@@ -129,16 +132,14 @@ class User extends GameObject {
                 this.currentNode = this.playerMoveBonus(this.currentNode, placeTower, units);
             }
         }
-
         this.drawObject();
     }
 
     setCurrentNode(pointCurrentTower) {
         let tower = this.getFromMap(pointCurrentTower);
         if(tower.client_id === this.pid) {
-            if(tower.parentNode == null)
+            if(tower.parentNode === null)
                 alert("wtf!");
-
             this.currentNode = tower.parentNode;
             this.myGraph.setCurrentVertex(tower.parentNode);
         }
@@ -172,13 +173,50 @@ class User extends GameObject {
     }
 
     getFromMap(point) {
-        // put only nodes
         let r = this.world.arrayMap[point.x][point.y];
         if(!r)
             return null;
-
         return r;
     }
+
+    removeNode(point){
+        this.myGraph.removeNode(point);
+        this.world.removeTowerFromMap(point);
+        this.currentNode = this.myGraph.rootNode;
+        this.drawObject();
+    }
+
+    acceptMove(json) {
+        let result = json["result"];
+        if(result === "ACCEPT_LOSE")
+            return;
+
+        let newNodes = json["newNodes"];
+
+        let myNewNode = newNodes.find((item)=>{
+            return (item.pid === this.pid);
+        });
+
+        if(myNewNode){
+            if(!this.waitNode || !this.waitUnits)
+                return;
+
+            let fromNode = this.waitNode;
+            let unitsCount = this.waitUnits;
+            let newPoint = myNewNode.value;
+            fromNode.data.units -= unitsCount;
+
+            let tower = this.generateMyTower(newPoint, unitsCount);
+            this.world.addTowerToMap(newPoint, tower);
+
+            let newNode = this.myGraph.addNewVertexToCurrent(tower);
+            this.setTowerNode(tower, newNode);
+        }
+
+        this.waitUnits = null;
+        this.waitNode = null;
+    }
+
 }
 
 export default User;

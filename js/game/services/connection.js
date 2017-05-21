@@ -13,9 +13,8 @@ class Connection {
     }
 
     createPingPong() {
-        if(this.timerId == null)
+        if(!this.timerId)
             this.timerId = setInterval(() => {}, mainConfiguration.pingPongTime);
-
     }
 
     removePingPong() {

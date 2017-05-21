@@ -1,5 +1,5 @@
 window.mainConfiguration = {
-    debugMode: true,
+    debugMode: false,
     needAppCache: false,
 
     pingPongTime: 10000

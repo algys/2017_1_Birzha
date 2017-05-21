@@ -177,6 +177,7 @@ class Tower {
 
         this.setTextCoordinates(this.realX, this.realY);
         this.setTowerCoordinates(this.realX, this.realY);
+        this.world.update();
     }
 
     setUserColor(color){

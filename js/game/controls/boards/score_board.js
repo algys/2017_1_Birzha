@@ -42,6 +42,13 @@ class ScoreBoard{
         this.scores.set(nickname, scoreBoardLine);
     }
 
+    clear(){
+        this.scores.forEach((line)=>{
+           this.scoreBoard.removeChild(line);
+        });
+        this.scores.clear();
+    }
+
     changeValue(nickname, newScore) {
         if(!(nickname in this.scores)) {
             return false;
@@ -55,6 +62,8 @@ class ScoreBoard{
         score.textContent = newScore;
         return true;
     }
+
+
 }
 
 export default ScoreBoard;

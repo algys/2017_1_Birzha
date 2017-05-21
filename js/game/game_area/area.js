@@ -102,14 +102,18 @@ class Area {
         return {x: px, y: py}
     }
 
-    markSelectedCell(x, y) {
+    markSelectedCell(x, y, status) {
         let rectSize = this.rectSize;
         let borderSize = this.borderSize;
         x *= rectSize;
         y *= rectSize;
 
         let cell = new createjs.Shape();
-        cell.graphics.beginFill("#beffb1").drawRect(x + borderSize, y + borderSize, rectSize - borderSize, rectSize - borderSize).endFill();
+        if(status)
+            cell.graphics.beginFill("#beffb1").drawRect(x + borderSize, y + borderSize, rectSize - borderSize, rectSize - borderSize).endFill();
+        else
+            cell.graphics.beginFill("#dbffd0").drawRect(x + borderSize, y + borderSize, rectSize - borderSize, rectSize - borderSize).endFill();
+
         this.world.addChild(cell);
         this.stage.update();
     }

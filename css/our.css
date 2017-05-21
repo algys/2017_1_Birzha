@@ -80,3 +80,19 @@
 .ZoomBoard > div:hover{
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
+
+.WaitBoard{
+    position: absolute;
+    z-index: 3;
+    width: 20%;
+    height: 5%;
+    top: 2%;
+    left: 2%;
+}
+
+.PerformBoard#board{
+
+    height: 5%;
+    top: 2%;
+    left: 2%;
+}
