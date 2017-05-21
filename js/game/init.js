@@ -160,6 +160,8 @@ function debugGame(elementDOM) {
         });
 
         user.setPerforming(true);
+
+        new PlayPage(world, null).startPage(null);
     };
 
     let menuPage = new MenuPage(world, iAmReady);

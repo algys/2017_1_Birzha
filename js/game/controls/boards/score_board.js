@@ -67,6 +67,3 @@ class ScoreBoard{
 }
 
 export default ScoreBoard;
-/**
- * Created by algys on 18.04.17.
- */

@@ -36,6 +36,13 @@ class PlayPage extends BasePage {
     }
 
     startPage(room) {
+        let controls = new Controls();
+        controls.pushNotify({text: "!!!"});
+        controls.pushNotify({text: "New text"});
+
+        let lastScores = null;
+        return;
+
         let perfomingPlayer = room.pid;
 
         let meData = this.splitUsers(room.players, room.meId);
@@ -67,9 +74,6 @@ class PlayPage extends BasePage {
                 bonus.draw();
             });
         });
-
-        let controls = new Controls();
-        let lastScores = null;
 
         /* code for algys */
         this.connection.addEventListen(DATATYPE_PLAYERMOVE, (json) => {
