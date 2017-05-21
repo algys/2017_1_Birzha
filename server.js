@@ -1,9 +1,17 @@
 'use strict';
-
 const expr = require("express");
 
 const app = expr();
 
+/*******PUG*WORK******/
+const includeDirs = [
+    "./js/blocks",
+    "./js/game/game_templates"
+];
+
+require("./pug_module")(includeDirs, "./js/templates");
+
+/*********************/
 app.use(expr.static('./'));
 
 app.get('/login', function (req, res){

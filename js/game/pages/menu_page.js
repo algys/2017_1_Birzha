@@ -1,5 +1,7 @@
 import BasePage from './base_page';
 
+import PerformBoard from '../controls/boards/performBoard'
+
 class MenuPage extends BasePage {
     constructor(world, callBackIfRun) {
         super(world);
@@ -8,18 +10,14 @@ class MenuPage extends BasePage {
         this.children = [];
 
         this.buttonMenu = null;
-        this.menuShapes = null;
-
-        this.ticker = 0;
-
-        this.enableRotation = false;
+        this.roomBoard = null; /* choose room */
     }
 
     startPage(resource) {
-        let cellCenter = this.world.area.getExactPosition(this.world.area.fullSize.x/2, this.world.area.fullSize.y/2);
+        let cellCenter = this.world.area.getExactPosition(this.world.area.fullSize.x / 2, this.world.area.fullSize.y / 2);
         let cenX = cellCenter.x, cenY = cellCenter.y;
         this.world.setOffsetForCenter(cenX, cenY);
-        scrollTo(0,0);
+        scrollTo(0, 0);
         document.body.style.overflow = "hidden";
 
         this.buttonMenu = this.world.newImage(resource.getResult("playButton"));
@@ -31,7 +29,7 @@ class MenuPage extends BasePage {
         this.world.update();
         this.world.area.update();
 
-        this.buttonAnimate = function(event){
+        this.buttonAnimate = function (event) {
             this.buttonMenu.rotation += 2;
             this.world.update();
         };
@@ -43,13 +41,31 @@ class MenuPage extends BasePage {
         this.buttonMenu.on('click', onClickRun.bind(this));
     }
 
+    startRoomChoose(connection) {
+        this.roomBoard = new PerformBoard(document.getElementById("push-container"),
+            this.chooseRoomByClient.bind(this));
+
+        connection.addEventListen(DATATYPE_ROOMMANAGER_UPDATE, (json) => {
+            /* update room status */
+            this.roomBoard.update(json["freerooms"]);
+        });
+    }
+
+    chooseRoomByClient(chooseCount) {
+        this.roomBoard.destruct();
+        this.callbackIfRun(chooseCount);
+    }
+
     stopPage() {
         this.world.map.removeChild(this.buttonMenu);
         this.world.update();
     }
 
     setEnableRotation(flag) {
-        if(flag && !createjs.Ticker.hasEventListener("tick")) {
+        if(flag) {
+            if(createjs.Ticker.hasEventListener("tick"))
+                return;
+
             createjs.Ticker.addEventListener("tick", this.buttonAnimate.bind(this));
             createjs.Ticker.setInterval(10);
             createjs.Ticker.setFPS(60);

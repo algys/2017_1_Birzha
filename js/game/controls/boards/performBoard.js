@@ -1,38 +1,59 @@
-/**
- * Created by algys on 17.05.17.
- */
+import roombase from '../../../templates/roombase';
+import room from '../../../templates/room';
 
-class PerformBoard{
-    constructor(){
-        this.board = document.createElement("div");
-        this.board.className = "PerformBoard";
-        this.board.id = "board";
+class PerformBoard {
+    constructor(root, callback) {
+        root.innerHTML = roombase({
+            quickStart: "Quick start"
+        });
+        this.root = root;
 
-        this.title = document.createElement("div");
-        this.title.id = "title";
-        this.title.textContent = "Players";
-        this.roomStatus = document.createElement("div");
-        this.roomStatus.id = "roomStatus";
-        this.roomStatus.textContent = "Wait for one more ...";
+        this.board = document.getElementById("cyclic-rooms-container");
 
-        this.board.appendChild(this.title);
-        this.board.appendChild(this.roomStatus);
-        document.body.appendChild(this.board);
+        mainConfiguration.roomTypes.forEach((roomCount) => {
+            let tempDiv = document.createElement('template');
+            tempDiv.innerHTML = room({
+                count: roomCount,
+                countText: mainConfiguration.roomPrefix + roomCount,
+                roomText: "room " + roomCount
+            });
 
-        [2, 3, 4, 5].forEach((roomCount) => {
-            let tempDiv = document.createElement("div");
-            tempDiv.className = "room-" + (roomCount);
-            tempDiv.innerHTML = "data " + roomCount;
+            let finalDiv = tempDiv.content.firstChild;
 
-            this.board.appendChild(tempDiv);
+            finalDiv.countPlayers = roomCount;
+            finalDiv.onclick = this.wrapperClick.bind(this);
+            finalDiv.setAttribute("num", roomCount);
+
+            this.board.appendChild(finalDiv);
+        });
+
+        this.callback = callback;
+        document.getElementById("cyclic-rooms-button-quick").onclick = () => { this.callback(null); };
+    }
+
+    wrapperClick(event) {
+        let count = event.target.getAttribute("num");
+        this.callback(count);
+    }
+
+    update(statusArray) {
+        let childs = this.board.childNodes;
+        childs.forEach((obj, index) => {
+            let nowStatus = statusArray[index];
+
+            let count = obj.getAttribute("num");
+            if(count == nowStatus["capacity"])
+                alert("wtf! please sync room server and client");
+
+            let getNumField = document.getElementById("cyclic-menu-room-count-" + count);
+            getNumField.innerHTML =
+                mainConfiguration.roomPrefix.replace("?", nowStatus["queue"]) + count;
         });
     }
 
-    /**
-     * {2: 2, 3: 1, 4: 0}
-     */
-    update(status) {
-
+    destruct() {
+        /* delete */
+        this.root.innerHTML = "";
     }
 }
 

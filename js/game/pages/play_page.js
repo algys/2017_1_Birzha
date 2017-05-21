@@ -58,7 +58,6 @@ class PlayPage extends BasePage {
 
         for(let index in this.enemiesData) {
             let enemyData = this.enemiesData[index];
-            debugger;
             this.enemiesObject[enemyData.id] = new Enemy(this.connection, this.world, enemyData);
             if(enemyData.id === perfomingPlayer) {
                 this.nowPerforming = this.enemiesObject[enemyData.id];

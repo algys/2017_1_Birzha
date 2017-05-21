@@ -31,16 +31,18 @@ class Room {
 
             console.log("Get [room.js]: " + roomId);
         });
-
-        this.connection.send(READY_FOR_ROOM_SEARCH);
     }
 
     deleteListenRoomInfo() {
         this.connection.deleteListen(DATATYPE_ROOMINFO);
     }
 
-    iAmReady() {
-        this.connection.send(READY_FOR_GAME_START);
+    iAmReady(countChoose) {
+        // TODO update api
+        this.connection.send(GIVE_ME_ROOM,
+            (countChoose) ? { "roomCapacity": countChoose } : {}
+        );
+
         this.waitPage.setEnableRotation(true);
     }
 

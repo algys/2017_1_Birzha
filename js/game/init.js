@@ -18,9 +18,9 @@ window.DATATYPE_NEWBONUS = "DATATYPE_NEWBONUS";
 window.DATATYPE_ERROR = "DATATYPE_ERROR";
 window.DATATYPE_HELLO = "DATATYPE_HELLO";
 window.DATATYPE_ROOM_DESTRUCT = "DATATYPE_ROOM_DESTRUCTION";
+window.DATATYPE_ROOMMANAGER_UPDATE = "DATATYPE_ROOMMANAGER_UPDATE";
 
-window.READY_FOR_ROOM_SEARCH = "ACTION_READY_FOR_ROOM_SEARCH";
-window.READY_FOR_GAME_START = "ACTION_READY_FOR_GAME_START";
+window.GIVE_ME_ROOM = "ACTION_GIVE_ME_ROOM";
 window.GAME_UPDATE_MY_MOVE = "ACTION_GAME_MOVE";
 
 window.RES_OK = 0;
@@ -40,7 +40,7 @@ window.conf = {
           {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
           {host: "172.16.94.65", port: 8081, path: "/game"}
     ],
-    baseIP: 4,
+    baseIP: 3,
 
     countUsersInRoom: 2,
 
@@ -80,57 +80,65 @@ function startGame(elementDOM) {
     let connectionService = null;
     let room = null;
 
-    const iAmReady = function () {
+    const iAmReady = function (countChoose) {
         if(room === null) {
             alert("room ~ null");
             return;
         }
 
-        room.iAmReady();
+        room.iAmReady(countChoose);
     };
 
     let area = new Area(elementDOM);
     let world = new World(elementDOM, area);
 
+    // No connection
     let menuPage = new MenuPage(world, iAmReady);
 
-
-    loadResourse((result) => {
-        console.log(result);
-        menuPage.startPage(result);
-    });
-
-    connectionService = new Connection((status) => {
-        if(status === RES_ERROR) {
-            alert("error connect server!"); // error
-            return;
-        }
-
-        let playPage = new PlayPage(world, connectionService, null); // TODO loading
-
-        let ifstop = ()=>{
-            menuPage.startPage();
-        };
-
-        connectionService.addEventListen(DATATYPE_HELLO, (json) => {
-            let id = json["id"];
-            let nickname = json["nickname"];
-
-            if(id === null || nickname === null) {
-                alert("error");
+    let startConnect = (result) => {
+        connectionService = new Connection((status) => {
+            if(status === RES_ERROR) {
+                alert("error connect server!"); // error
                 return;
             }
 
-            console.log("start after hello");
-            room = new Room(connectionService, menuPage, id, nickname, (room) => {
-                room.deleteListenRoomInfo();
-                menuPage.stopPage(); // destruct room choose
+            let playPage = new PlayPage(world, connectionService, null); // TODO loading
 
-                playPage.startPage(room, ifstop);
+            let ifstop = () => {
+                /* stop */
+                menuPage.startPage();
+            };
 
-                world.update();
+            connectionService.addEventListen(DATATYPE_HELLO, (json) => {
+                let id = json["id"];
+                let nickname = json["nickname"];
+
+                if(id === null || nickname === null) {
+                    alert("error");
+                    return;
+                }
+
+                console.log("start after hello");
+                menuPage.startPage(result);
+                menuPage.startRoomChoose(connectionService);
+
+                room = new Room(connectionService, menuPage, id, nickname, (room) => {
+                    debugger;
+                    room.deleteListenRoomInfo();
+                    menuPage.stopPage(); // destruct room choose
+
+                    playPage.startPage(room, ifstop);
+
+                    world.update();
+                });
+
             });
         });
+    };
+
+    loadResourse((result) => {
+        console.log(result);
+        startConnect(result);
     });
 }
 
