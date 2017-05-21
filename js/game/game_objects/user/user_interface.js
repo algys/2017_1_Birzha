@@ -1,7 +1,16 @@
+const STATE_BEGIN = 0,
+      STATE_FLY = 1,
+      STATE_CHOOSE_NODE = 2,
+      STATE_DO_STEP = 3,
+      STATE_CHECK_STEP = 4,
+      STATE_CHOOSE_UNITS = 5;
+
 class UserInterface {
     constructor(world, packCallback, startPos) {
         this.world = world; // get area
         document.addEventListener("mousemove", this.eventManager.bind(this));
+        document.addEventListener("mouseup", this.eventManager.bind(this));
+        document.addEventListener("mousedown", this.eventManager.bind(this));
 
         this.probablyLine = this.world.newLine("black");
 
@@ -22,17 +31,15 @@ class UserInterface {
         }, false);
 
         this.currentPos = this.startPos;
-        this.color = this.packCallback["getMyColor"]();
+
+        this.makeState(STATE_BEGIN, null);
     }
 
-    checkToMove(cellPos){
-        if(Math.abs(cellPos.x - this.currentPos.x) > 2)
-            return false;
-        if(Math.abs(cellPos.y - this.currentPos.y) > 2)
-            return false;
-
-        return Math.abs(cellPos.x - this.currentPos.x) *
-            Math.abs(cellPos.y - this.currentPos.y) !== 2 * 2;
+    makeState(typeState, data) {
+        this.currentMode = {
+            typeState: typeState,
+            data: data
+        };
     }
 
     eventMove(event) {
@@ -54,6 +61,8 @@ class UserInterface {
         this.probablyCircle.y = pxPoint.y - mv.y;
 
         this.probablyLine.graphics.clear();
+        if(this.currentMode.typeState === STATE_DO_STEP) {
+            if(fullLength < Math.abs(mv.x) || (fullLength < Math.abs(mv.y))) {
         if(this.currentMode === 'moving') {
             if(!this.checkToMove(cellPos)) {
                 this.world.area.markCurrentCell(cellPos.x, cellPos.y, 1);
@@ -64,7 +73,7 @@ class UserInterface {
             this.probablyLine.graphics.moveTo(pxPoint.x, pxPoint.y);
             this.probablyLine.graphics.lineTo(this.probablyCircle.x, this.probablyCircle.y);
             this.probablyLine.graphics.endStroke();
-        } else if(this.currentMode === 'choosing') {
+        } else if(this.currentMode === STATE_CHOOSE_NODE) {
             if(this.world.arrayMap[cellPos.x][cellPos.y]) {
                 if (this.world.arrayMap[cellPos.x][cellPos.y].client_id !== this.packCallback['getClientId']()) {
                     this.world.area.markCurrentCell(cellPos.x, cellPos.y, 1);
@@ -80,9 +89,21 @@ class UserInterface {
         this.world.update(); // TODO tick
     }
 
-    putNewVertex() {
+    checkCellForVertex() {
+        let fullLength = conf.rectSize * 2 + conf.borderSize * 6;
+        if (fullLength < Math.abs(this.last_mv.x) || (fullLength < Math.abs(this.last_mv.y))) {
+            this.makeState(STATE_DO_STEP);
+            return false;
+        }
+
+        return true;
+    }
+
+    putNewVertex(newPoint, units) {
+        console.log("choose units: " + units);
+
         let pxPoint = this.world.area.getPixelPoint(this.currentPos.x, this.currentPos.y);
-        let newX = pxPoint.x - this.last_mv.x , newY = pxPoint.y - this.last_mv.y;
+        let newX = newPoint.x, newY = newPoint.y;
         let newPos = this.world.area.getCellPosition(newX, newY);
         if(!this.checkToMove(newPos)) {
             return;
@@ -126,29 +147,65 @@ class UserInterface {
 
     eventManager(event){
         if(event.type === 'click' && event.which === 1 && this.pointerLockStatus === false){
-            this.currentMode = 'choosing';
+            this.makeState(STATE_CHOOSE_NODE, null);
             this.world.canvas.requestPointerLock();
             return;
         }
 
-        if(this.packCallback["getPerforming"]()) {
-            if (event.type === 'click' && event.which === 1 && this.currentMode === 'choosing') {
+        if(event.type === 'click' &&
+            event.which === 1 &&
+            this.packCallback["getPerforming"]()) {
+
+            if (this.currentMode.typeState === STATE_CHOOSE_NODE) {
+                this.makeState(STATE_DO_STEP, null);
                 this.chooseNewVertex(event);
-                this.currentMode = 'moving';
                 return;
             }
-            if (event.type === 'click' && event.which === 1 && this.currentMode === 'moving') {
-                this.putNewVertex(event);
-                return;
-            }
+
+            // if (this.currentMode.typeState === STATE_DO_STEP) {
+            //     this.makeState(STATE_CHECK_STEP, null);
+            //     this.putNewVertex(event);
+            //     return;
+            // }
         }
 
-        if (event.type === 'click' && event.which === 3 && this.currentMode === 'moving') {
+        if (event.type === 'click' && event.which === 3 && this.currentMode.typeState === STATE_DO_STEP) {
+            this.makeState(STATE_CHOOSE_NODE, null);
             this.probablyLine.graphics.clear();
-            this.currentMode = 'choosing';
         }
-        if(event.type === 'mousemove' && this.pointerLockStatus){
-            this.eventMove(event);
+
+        if(this.pointerLockStatus)
+            if(event.type === 'mousemove') {
+                this.eventMove(event); // PASS STATE_CHOOSE_NODE AND STATE_DO_STEP, STATE_CHOOSE_UNITS
+
+                if(this.currentMode.typeState === STATE_CHOOSE_UNITS) {
+                    console.log("!!");
+                }
+            } else if(event.type === 'mousedown' && this.currentMode.typeState === STATE_DO_STEP) {
+                if(!this.checkCellForVertex())
+                    return;
+
+                let newX = this.probablyCircle.x, newY = this.probablyCircle.y;
+                let newPos = this.world.area.getCellPosition(newX, newY);
+
+                this.world.area.markSelectedCell(newPos.x, newPos.y);
+
+                this.makeState(STATE_CHOOSE_UNITS, {
+                    position: { x: newX, y: newY },
+                    mv: { x: this.last_mv.x, y: this.last_mv.y }
+                });
+            } else if(event.type === 'mouseup' && this.currentMode.typeState === STATE_CHOOSE_UNITS) {
+                this.putNewVertex(this.currentMode.data.position,
+                    this.last_mv.y - this.currentMode.data.mv.y + 50);
+
+                this.makeState(STATE_DO_STEP, null);
+                // TODO draw scroll
+            }
+    }
+
+    closeManager(event) {
+        if(this.currentMode == 'chooseunits') {
+            console.log("up");
         }
     }
 }
