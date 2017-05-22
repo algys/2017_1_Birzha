@@ -192,6 +192,16 @@ class Area {
     update(){
         this.world.stage.update();
     }
+
+    setSize(height, width){
+        this.worldSizeH = height;
+        this.worldSizeW = width;
+    }
+
+    reconfigure(){
+        this.world.removeAllChildren();
+        this.initArea();
+    }
 }
 
 export default Area;

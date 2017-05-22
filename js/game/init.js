@@ -125,7 +125,9 @@ function startGame(elementDOM) {
                 menuPage.startPage(result);
                 menuPage.startRoomChoose(connectionService);
 
-                room = new Room(connectionService, menuPage, id, nickname, (room) => {
+                room = new Room(connectionService, menuPage, id, nickname, (room, height, width) => {
+                    area.setSize(height, width);
+                    area.reconfigure();
                     room.deleteListenRoomInfo();
                     menuPage.stopPage(); // destruct room choose
 

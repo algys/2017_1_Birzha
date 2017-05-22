@@ -91,6 +91,8 @@ class PlayPage extends BasePage {
             let removedNodes = json["removedNodes"];
             let scores = json["scores"];
 
+         //   debugger;
+
             if (removedNodes) {
                 removedNodes.forEach((removedNode) => {
                     let pid = this.world.getTowerFromMap(removedNode).client_id;
@@ -98,6 +100,15 @@ class PlayPage extends BasePage {
                         this.user.removeNode(removedNode);
                     else
                         this.enemiesObject[pid].removeNode(removedNode);
+                });
+            }
+
+            if (newNodes) {
+                newNodes.forEach((newNode) => {
+                    let pid = newNode["pid"];
+                    if (pid !== this.user.pid) {
+                        this.enemiesObject[pid].addNewTower(newNode);
+                    }
                 });
             }
 
@@ -112,15 +123,6 @@ class PlayPage extends BasePage {
                     let pid = tower.client_id;
                     if(pid !== this.user.pid)
                         this.world.getTowerFromMap(point).changeUnits(newUnits);
-                });
-            }
-
-            if (newNodes) {
-                newNodes.forEach((newNode) => {
-                    let pid = newNode["pid"];
-                    if (pid !== this.user.pid) {
-                        this.enemiesObject[pid].addNewTower(newNode);
-                    }
                 });
             }
 
@@ -171,7 +173,7 @@ class PlayPage extends BasePage {
         /* event status server and pid*/
         this.connection.addEventListen(DATATYPE_ROOMINFO, (json) => {
             let status = json["status"];
-
+            this.world.area.setSize(json["fieldHeight"],json["fieldWidth"]);
             if (status === STATUS_PLAYING && "pid" in json) {
                 let pid = json["pid"];
 
