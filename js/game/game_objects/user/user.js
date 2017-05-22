@@ -120,11 +120,10 @@ class User extends GameObject {
     addNewTower(pointNewTower, units) {
         let placeTower = this.getFromMap(pointNewTower);
         this.setPerforming(false); // TODO if error
-
         if (placeTower === null) {
             this.currentNode = this.playerMoveFree(this.currentNode, pointNewTower, units);
         } else { // TODO work fight
-            if (placeTower.constructor.name === "NodeImpl") {
+            if (placeTower.client_id > 0) {
                 this.playerMoveFight(this.currentNode, placeTower.parentNode, units);
             } else {
                 this.currentNode = this.playerMoveBonus(this.currentNode, placeTower, units);
@@ -185,6 +184,7 @@ class User extends GameObject {
     }
 
     acceptMove(json) {
+        debugger;
         let result = json["result"];
         if(result === "ACCEPT_LOSE")
             return;
@@ -201,16 +201,21 @@ class User extends GameObject {
 
             let fromNode = this.waitNode;
             let unitsCount = this.waitUnits;
-            let newPoint = myNewNode.value;
+            let newUnits = myNewNode.value;
+            let newPoint = {
+                x: myNewNode.x,
+                y: myNewNode.y
+            };
             fromNode.data.units -= unitsCount;
 
-            let tower = this.generateMyTower(newPoint, unitsCount);
+            let tower = this.generateMyTower(newPoint, newUnits);
             this.world.addTowerToMap(newPoint, tower);
 
             let newNode = this.myGraph.addNewVertexToCurrent(tower);
             this.setTowerNode(tower, newNode);
         }
 
+        this.drawObject();
         this.waitUnits = null;
         this.waitNode = null;
     }

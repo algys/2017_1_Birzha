@@ -25,7 +25,7 @@ class Room {
                 this.roomId = roomId; // TODO change runID
                 this.pid = pID;
 
-                this.runGame(this);
+                this.runGame(this, json["fieldHeight"], json["fieldWidth"]);
                 this.waitPage.setEnableRotation(false);
             }
 

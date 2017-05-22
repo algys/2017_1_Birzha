@@ -166,6 +166,9 @@ class UserInterface {
     putNewVertex(newPoint, units) {
         console.log("choose units: " + units);
 
+        if(!this.packCallback["getPerforming"]())
+            return;
+
         let newX = newPoint.x, newY = newPoint.y;
         let newPos = this.world.area.getCellPosition(newX, newY);
         if (!this.checkCellForVertex(newPos)) {
