@@ -1,27 +1,3 @@
-/**
- * Created by algys on 10.03.17.
- */
-/*
- Example:
-
- myHeaders = new Headers({
- "Content-Type": "text/plain",
- "Content-Length": content.length.toString(),
- "X-Custom-Header": "ProcessThisImmediately",
- });
-
- fetch(myRequest)
- .then(function(response) {
- return response.blob();
- });
-
- .then(function(myBlob) {
- var objectURL = URL.createObjectURL(myBlob);
- myImage.src = objectURL;
- });
-
- */
-
 'use strict';
 
 const ALLOWED_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
@@ -29,14 +5,13 @@ const ALLOWED_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
 class Request {
     constructor(server) {
         this.server = server;
-;
         this.funcs = [];
 
         this.baseCatch = function (error) {
             console.log('[FAIL] ', error);
         };
 
-        this.json = '{}';
+        this.json = null;
     }
 
     addResponse(_func) {

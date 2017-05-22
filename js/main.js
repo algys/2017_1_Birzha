@@ -208,7 +208,7 @@ import serviceWorkerLoader from '../worker_loader';
     menu.appendChild(menuForm.el);
 
     let btnLogout = document.getElementById("logoutPressed");
-    ;
+
     btnLogout.onclick = (event)=>{
         event.preventDefault();
         setCookie('logged', 'false');
@@ -229,7 +229,6 @@ import serviceWorkerLoader from '../worker_loader';
 
         auth.auth(loginData,
             ()=>{
-            ;
                 auth.getMe(
                     (user)=>{
                         console.log("Success login !");

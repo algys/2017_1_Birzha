@@ -1,0 +1,21 @@
+if load
+    div(class="cyclic-loader")
+else
+    div(class="inner cover")
+        h1(class="cover-heading") Leaderboard
+        div(class="col-md-3")
+
+        div(class="col-md-6")
+            table(class="table table-bordered table-condensed Leader-table")
+                thead
+                    tr
+                        th Nickname
+                        th Score
+
+                tbody
+                    each user in users
+                        tr
+                            td= user["nick"]
+                            td= user["highscore"]
+
+        div(class="col-md-3")

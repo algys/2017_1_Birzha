@@ -10,7 +10,7 @@ class Auth{
     }
 
     getMe(success, error){
-        new Request('http://'+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
+        new Request('http://' + conf.ip[conf.baseIP].host + ':' + conf.ip[conf.baseIP].port + '/api')
             .addResponse(function (response) {
                 console.log(response);
                 if (response.status !== 200) {
