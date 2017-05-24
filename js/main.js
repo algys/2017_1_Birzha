@@ -2,13 +2,6 @@ import './conf/conf'
 
 import Router from './router';
 
-import MenuView from './views/menuView'
-import LoginView from './views/loginView'
-import RegistrationView from './views/registrationView';
-import LeaderBoardView from './views/leaderboardView';
-import GameView from './views/gameView';
-import AboutView from './views/aboutView';
-
 import LoginForm from './blocks/login/login';
 import Menu from './blocks/menu/menu';
 import About from './blocks/about/about'
@@ -17,6 +10,16 @@ import RegistrationForm from './blocks/register/registration';
 import Auth from './auth';
 
 import serviceWorkerLoader from '../worker_loader';
+
+import { getCookie, setCookie } from './util'
+import * from './controller'
+const loginPack = [
+  { path: '/', generator: loginController }, 
+  { '/login', generator: loginController },
+  { '/about', generator: aboutController }
+];
+
+const mainPack = ['/', '/main', '/leaderboard', '/logout', '/game', '/about'];
 
 (function () {
     window.confServer = {};
@@ -32,67 +35,23 @@ import serviceWorkerLoader from '../worker_loader';
     }).catch(error => "Error");
 
     let auth = new Auth();
-    let router = new Router(window.document.documentElement);
-
-    let menuView = new MenuView(document.querySelector('.menu-view'));
-    let loginView = new LoginView(document.querySelector('.login-view'));
-    let registrationView = new RegistrationView(document.querySelector('.registration-view'));
-    let aboutView = new AboutView(document.querySelector('.about-view'));
-    let leaderBoardView = new LeaderBoardView(document.querySelector('.leaderboard-view'));
-    let gameView = new GameView(document.querySelector('.game-view'));
+    let router = () => new Router(window.document.documentElement);
 
     router.register('/', loginView);
     router.register('/login', loginView);
     router.register('/about', aboutView);
-    router.register('/logout', registrationView);
+    router.register('/register', registrationView);
     router.register('/leaderboard', leaderBoardView);
 
-
-
-    function getCookie(name) {
-        let matches = document.cookie.match(new RegExp(
-            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-        ));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
-
-    function setCookie(name, value, options) {
-        options = options || {};
-
-        let expires = options.expires;
-
-        if (typeof expires === "number" && expires) {
-            let d = new Date();
-            d.setTime(d.getTime() + expires * 1000);
-            expires = options.expires = d;
-        }
-        if (expires && expires.toUTCString) {
-            options.expires = expires.toUTCString();
-        }
-
-        value = encodeURIComponent(value);
-
-        let updatedCookie = name + "=" + value;
-
-        for (let propName in options) {
-            updatedCookie += "; " + propName;
-            let propValue = options[propName];
-            if (propValue !== true) {
-                updatedCookie += "=" + propValue;
-            }
-        }
-
-        document.cookie = updatedCookie;
-    }
-
-    if(getCookie('logged')==='true'){
+    if(getCookie('logged')==='true') {
         console.log("Already login !");
         router.register('/', menuView);
         router.register('/main', menuView);
         router.register('/game', gameView);
         router.go("/main");
+    } else if() {
+
     }
-    document.getElementById('registered').textContent = getCookie('login');
 
     router.start();
 
@@ -210,15 +169,17 @@ import serviceWorkerLoader from '../worker_loader';
     let btnLogout = document.getElementById("logoutPressed");
 
     btnLogout.onclick = (event)=>{
+        debugger;
         event.preventDefault();
         setCookie('logged', 'false');
         setCookie('login', 'Guest');
+        router.go('/login');
         auth.logout(
-            ()=>{
-                router.go('/login');
+            () => {
+                console.log("success login");
             },
-            ()=>{
-                console.log("Error, logout !");
+            () => {
+                console.log("Error, logout!");
             }
         );
     };
@@ -228,9 +189,9 @@ import serviceWorkerLoader from '../worker_loader';
         let loginData = loginForm.getFormData();
 
         auth.auth(loginData,
-            ()=>{
+            () => {
                 auth.getMe(
-                    (user)=>{
+                    (user) => {
                         console.log("Success login !");
                         router.register('/', menuView);
                         router.register('/main', menuView);
@@ -241,12 +202,12 @@ import serviceWorkerLoader from '../worker_loader';
                         document.cookie = 'login=' + user.login;
                         document.getElementById('registered').textContent = user.login;
                     },
-                    ()=>{
+                    () => {
 
                     }
                 )
             },
-            ()=>{
+            () => {
                 console.log("Fail login !");
             }
         );
