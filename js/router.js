@@ -12,16 +12,39 @@ class Router {
         return this.routes[href];
     }
 
+    destruct() {
+        for (let index in this.routes) {
+            this.routes[index].hide();
+        }
+
+        delete this.routes;
+    }
+
+    setRouterPack(pack) {
+        this.destruct();
+
+        this.routes = {};
+        for (let viewController of pack) {
+            this.register(viewController.path,
+                viewController.generator());
+        }
+    }
+
+    updateNewPackToIndex(pack) {
+        this.setRouterPack(pack);
+
+        this.currentView = this._getViewByRoute('/');
+        this.startPage('/');
+    }
 
     onRouteChange(event) {
-
         if (!event.target instanceof HTMLAnchorElement) {
             return;
         }
 
-        if (this.go(event.target.getAttribute('href'))) {
+        let nextHref = event.target.getAttribute('href');
+        if (nextHref && this.go(nextHref))
             event.preventDefault();
-        }
 
     }
 
@@ -32,12 +55,11 @@ class Router {
         this.currentView = this._getViewByRoute(location.pathname);
     }
 
-    /**
-     * Перетий по маршруту
-     * @param {string} path
-     * @return {boolean} - если есть маршрурт
-     */
     go(path) {
+        debugger;
+        if(path === '')
+            path = '/';
+
         if(path === '/back'){
             window.history.back();
             return true;
@@ -46,7 +68,7 @@ class Router {
         let view = this._getViewByRoute(path);
 
         if(!path)
-            return false;
+            view = this._getViewByRoute('/'); // TODO 404
 
         if (!view) {
             view = this.routes['/'];
@@ -71,7 +93,7 @@ class Router {
         return true;
     }
 
-    startPage(url){
+    startPage(url) {
         let view = this._getViewByRoute(url);
         if (!view) {
             view = this.routes['/'];
@@ -79,7 +101,7 @@ class Router {
             url = '/';
         }
         view.show();
-        //let obj = { page: 1 };
+
         window.history.pushState(null, '', url);
 
         window.onpopstate = function (event) {
@@ -90,4 +112,4 @@ class Router {
 
 }
 
-export default Router;
+export let routerInstance = new Router(window.document.documentElement);

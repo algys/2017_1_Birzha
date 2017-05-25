@@ -34,12 +34,35 @@ export function setCookie(name, value, options) {
     document.cookie = updatedCookie;
 }
 
-export function setNameBar() {
-    let title = document.getElementById('registered');
-    if (title)
-        title.textContent = getCookie('login')
+function setLoginCookies(flag, name) {
+    setCookie('logged', flag);
+    setCookie('login', name);
 }
 
-export function setRouterPack(registerElements) {
+export function setOnlyBar() {
+    let title = document.getElementById('registered');
+    if (title)
+        title.textContent = getCookie('login');
+}
 
+export function setCookiesAndBar(authFlag, name) {
+    name = name || 'Guest';
+
+    setLoginCookies(authFlag, name);
+
+    if(authFlag)
+        setOnlyBar();
+    else
+        setLoginCookies(authFlag, name);
+}
+
+export function isLogin() {
+    let status = getCookie('logged');
+    if (status == "true") {
+        console.log("Already login!");
+        return true;
+    } else
+        console.log("Need login!");
+
+    return false;
 }
