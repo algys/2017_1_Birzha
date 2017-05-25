@@ -18,7 +18,6 @@ class Enemy extends GameObject {
         this.connection = connection;
 
         this.enemyGraph = new GraphTree(world, this.color);
-
         let tower = this.generateEnemyTower(point, info.units);
 
         this.world.addTowerToMap(point, tower);
@@ -36,7 +35,6 @@ class Enemy extends GameObject {
     generateEnemyTower(point, units) {
         let tower = new Tower(this.world, point.x, point.y, towerType.ENEMY,
             units);
-
         tower.client_id = this.pid;
         tower.setUserColor(this.color);
 
@@ -76,9 +74,17 @@ class Enemy extends GameObject {
     }
 
     removeNode(point){
-        debugger;
         this.enemyGraph.removeNode(point);
         this.drawObject();
+    }
+
+    removeLink(point1, point2){
+        this.enemyGraph.removeLink(point1, point2);
+        this.drawObject();
+    }
+
+    removeAll(){
+        this.enemyGraph.destruct();
     }
 }
 

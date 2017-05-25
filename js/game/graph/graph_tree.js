@@ -53,8 +53,15 @@ class GraphTree {
         removedTower.destruct();
     }
 
+    removeLink(point1, point2){
+        let removedTower1 = this.world.getTowerFromMap(point1);
+        let removedTower2 = this.world.getTowerFromMap(point2);
+        this.tree.removeLink(removedTower1.parentNode, removedTower2.parentNode);
+    }
+
     destruct() {
         this.world.stage.removeChild(this.graphLine);
+        this.graphLine.graphics.clear();
         console.log(this.shapes);
         this.shapes.forEach((value, key) => {
             key.destruct();
@@ -67,7 +74,6 @@ class GraphTree {
         if(!this.shapes.has(tower)) {
             this.shapes.set(tower, 1 /* default */);
         }
-
         tower.setRealCoordinates(coordinatesX, coordinatesY);
         tower.draw();
     }
@@ -91,7 +97,7 @@ class GraphTree {
                     this.drawWireBetweenTowers(current.data.point, item.data.point);
                     this.go(item, marker);
                 } else {
-             //       this.drawWireBetweenTowers(current.data.point, item.data.point);
+                    this.drawWireBetweenTowers(current.data.point, item.data.point);
                 }
             });
         });

@@ -8,25 +8,26 @@ class MenuBoard{
         this.menuBoard.className = "MenuBoard";
         this.menuBoard.id = "board";
 
-        let buttonHome = document.createElement("div");
-        buttonHome.id = "home";
-        buttonHome.className = "fa fa-home fa-3x";
+        this.buttonHome = document.createElement("div");
+        this.buttonHome.id = "home";
+        this.buttonHome.className = "fa fa-times fa-3x";
 
-        let buttonMenu = document.createElement("div");
-        buttonMenu.id = "menu";
-        buttonMenu.className = "fa fa-bars fa-3x";
-
-        let buttonSetting = document.createElement("div");
-        buttonSetting.id = "setting";
-        buttonSetting.className = "fa fa-cog fa-3x";
-
-
-        this.menuBoard.appendChild(buttonMenu);
-        this.menuBoard.appendChild(buttonHome);
-        this.menuBoard.appendChild(buttonSetting);
+        this.menuBoard.appendChild(this.buttonHome);
         document.body.appendChild(this.menuBoard);
 
         this.scores = new Map();
+    }
+
+    addExitListener(callback){
+        if(!this.exitListener)
+            this.buttonHome.addEventListener("click",(event)=>{
+                callback();
+            });
+        this.exitListener = callback;
+    }
+
+    destruct(){
+        document.body.removeChild(this.menuBoard);
     }
 }
 

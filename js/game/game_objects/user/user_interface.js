@@ -165,7 +165,8 @@ class UserInterface {
 
     putNewVertex(newPoint, units) {
         console.log("choose units: " + units);
-
+        if(units<1 || units>this.currentMode.data.currentTower.units-1)
+            return;
         if(!this.packCallback["getPerforming"]())
             return;
 
@@ -290,7 +291,7 @@ class UserInterface {
 
                 this.scrollBar.hide();
 
-                this.makeState(STATE_DO_STEP, null);
+                this.makeState(STATE_CHOOSE_NODE, null);
                 // TODO draw scroll
             }
     }

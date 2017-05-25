@@ -19,6 +19,13 @@ class GameControls{
     pushNotify(push) {
         this.notifyBoard.pushNotify(push);
     }
+
+    destruct(){
+        this.scoreBoard.destruct();
+        this.menuBoard.destruct();
+        this.zoomBoard.destruct();
+        this.notifyBoard.hide();
+    }
 }
 
 export default GameControls;

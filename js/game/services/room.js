@@ -18,14 +18,14 @@ class Room {
             let status = json["status"];
             let players = json["players"];
             let pID = json["pid"];
-
+            debugger;
             this.players = players;
 
             if(status === STATUS_PLAYING) {
-                this.roomId = roomId; // TODO change runID
                 this.pid = pID;
 
                 this.runGame(this, json["fieldHeight"], json["fieldWidth"]);
+
                 this.waitPage.setEnableRotation(false);
             }
 

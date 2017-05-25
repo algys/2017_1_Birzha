@@ -19,6 +19,7 @@ class GameView extends BaseView {
     }
     hide() {
         super.hide();
+
         let div = document.getElementById("site-interface");
         div.style.visibility = "visible";
 

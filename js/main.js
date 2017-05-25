@@ -218,6 +218,7 @@ import serviceWorkerLoader from '../worker_loader';
                 router.go('/login');
             },
             ()=>{
+                router.go('/login');
                 console.log("Error, logout !");
             }
         );

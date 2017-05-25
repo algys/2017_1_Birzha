@@ -9,6 +9,7 @@ class BasePage {
 
     stopPage() {
     }
+
 }
 
 export default BasePage;

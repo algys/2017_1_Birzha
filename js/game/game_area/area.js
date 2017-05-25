@@ -19,11 +19,6 @@ class Area {
         this.canvas.height = document.documentElement.clientHeight;
         this.canvas.width = document.documentElement.clientWidth;
 
-        this.fullSize = {
-            x: this.rectSize * this.worldSizeW,
-            y: this.rectSize * this.worldSizeH
-        };
-
         elementDOM.appendChild(this.canvas);
 
         this.stage = new createjs.Stage(this.canvas.id);
@@ -43,6 +38,10 @@ class Area {
         let borderSize = this.borderSize;
         let xCount = document.documentElement.clientWidth / this.rectSize | 0;
         let yCount = document.documentElement.clientHeight / this.rectSize | 0;
+        this.fullSize = {
+            x: this.rectSize * this.worldSizeW,
+            y: this.rectSize * this.worldSizeH
+        };
 
         this.cells = [];
 
@@ -194,6 +193,8 @@ class Area {
     }
 
     setSize(height, width){
+        height = height || this.canvas.height / this.rectSize + 1;
+        width = width || this.canvas.width / this.rectSize + 1;
         this.worldSizeH = height;
         this.worldSizeW = width;
     }

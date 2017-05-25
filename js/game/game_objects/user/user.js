@@ -93,11 +93,9 @@ class User extends GameObject {
         let newUnits = bonusTower.units + unitsCount;
 
         /* make from bonus to user */
-        bonusTower.refreshTower(towerType.DEFAULT, newUnits, fromNode.parentNode, this.pid);
+        bonusTower.refreshTower(towerType.DEFAULT, newUnits, this.pid);
         bonusTower.setUserColor(this.color);
         /***************************/
-
-        this.world.addTowerToMap(bonusTower.point, bonusTower);
 
         /* action */
         this.userAction.createTown(fromNode.data.point, bonusTower.point, unitsCount);
@@ -109,6 +107,8 @@ class User extends GameObject {
 
     playerMoveLink(fromNode, toNode, unitsCount) {
         fromNode.data.units -= unitsCount;
+        toNode.data.units += unitsCount;
+        this.userAction.createTown(fromNode.data.point, toNode.data.point, unitsCount);
     }
 
     playerMoveFight(userNode, enemyNode, unitsCount) {
@@ -120,10 +120,13 @@ class User extends GameObject {
     addNewTower(pointNewTower, units) {
         let placeTower = this.getFromMap(pointNewTower);
         this.setPerforming(false); // TODO if error
-        if (placeTower === null) {
+        if (!placeTower) {
             this.currentNode = this.playerMoveFree(this.currentNode, pointNewTower, units);
         } else { // TODO work fight
-            if (placeTower.client_id > 0) {
+            if(placeTower.typeOfTower === towerType.DEFAULT){
+                this.playerMoveLink(this.currentNode, placeTower.parentNode, units);
+            } else
+            if (placeTower.typeOfTower === towerType.ENEMY) {
                 this.playerMoveFight(this.currentNode, placeTower.parentNode, units);
             } else {
                 this.currentNode = this.playerMoveBonus(this.currentNode, placeTower, units);
@@ -133,7 +136,7 @@ class User extends GameObject {
     }
 
     setCurrentNode(pointCurrentTower) {
-        let tower = this.getFromMap(pointCurrentTower);
+        let tower = this.world.getTowerFromMap(pointCurrentTower);
         if(tower.client_id === this.pid) {
             if(tower.parentNode === null)
                 alert("wtf!");
@@ -176,18 +179,29 @@ class User extends GameObject {
         return r;
     }
 
+    removeLink(point1, point2){
+        this.myGraph.removeLink(point1, point2);
+        this.drawObject();
+    }
+
+    createLink(from, to){
+        this.myGraph.addNewLink(from.parentNode, to.parentNode);
+        this.drawObject();
+    }
+
     removeNode(point){
         this.myGraph.removeNode(point);
-        this.world.removeTowerFromMap(point);
-        this.currentNode = this.myGraph.rootNode;
+        this.setCurrentNode(this.myGraph.getTree.rootNode.data.point);
+        this.userInterface.currentPos = this.currentNode.data.point;
         this.drawObject();
     }
 
     acceptMove(json) {
         debugger;
         let result = json["result"];
-        if(result === "ACCEPT_LOSE")
-            return;
+        if(result === "ACCEPT_LOSE"){
+
+        }
 
         let newNodes = json["newNodes"];
 
@@ -211,13 +225,17 @@ class User extends GameObject {
             let tower = this.generateMyTower(newPoint, newUnits);
             this.world.addTowerToMap(newPoint, tower);
 
-            let newNode = this.myGraph.addNewVertexToCurrent(tower);
+            let newNode = this.myGraph.addNewVertexByNode(tower, fromNode);
             this.setTowerNode(tower, newNode);
         }
 
         this.drawObject();
         this.waitUnits = null;
         this.waitNode = null;
+    }
+
+    destruct(){
+        document.removeEventListener()
     }
 }
 

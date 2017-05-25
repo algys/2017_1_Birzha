@@ -63,6 +63,9 @@ class ScoreBoard{
         return true;
     }
 
+    destruct(){
+        document.body.removeChild(this.scoreBoard);
+    }
 
 }
 

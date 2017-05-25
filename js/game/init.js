@@ -18,10 +18,14 @@ window.DATATYPE_NEWBONUS = "DATATYPE_NEWBONUS";
 window.DATATYPE_ERROR = "DATATYPE_ERROR";
 window.DATATYPE_HELLO = "DATATYPE_HELLO";
 window.DATATYPE_ROOM_DESTRUCT = "DATATYPE_ROOM_DESTRUCTION";
+window.DATATYPE_PLAYER_DISCONNECT = "DATATYPE_PLAYER_DISCONNECT";
 window.DATATYPE_ROOMMANAGER_UPDATE = "DATATYPE_ROOMMANAGER_UPDATE";
+window.DATATYPE_YOU_WIN = "DATATYPE_YOU_WIN";
 
 window.ACTION_GIVE_ME_ROOM = "ACTION_GIVE_ME_ROOM";
 window.ACTION_GAME_MOVE = "ACTION_GAME_MOVE";
+window.ACTION_PING = "ACTION_PING";
+window.ACTION_EXIT_ROOM = "ACTION_EXIT_ROOM";
 
 window.RES_OK = 0;
 window.RES_ROLLBACK = 1;
@@ -32,13 +36,13 @@ window.STATUS_PLAYING = "STATUS_PLAYING";
 window.STATUS_READY = "STATUS_READY";
 
 window.conf = {
-    ip: [ {host: "172.16.83.124", port: 8081, path: "/game "},
+    ip: [ {host: "172.16.91.197", port: 8081, path: "/game "},
           {host: "192.168.43.107", port: 8081, path: "/game"},
-          {host: "172.16.90.25", port: 8081, path: "/game"},
+          {host: "172.16.84.20", port: 8081, path: "/game"},
           {host: "172.20.10.4", port: 8081, path: "/game"},
           {host: "localhost", port: 8081, path: "/game"},
           {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
-          {host: "172.16.94.65", port: 8081, path: "/game"}
+          {host: "scaptaincap.asuscomm.com", port: 5000, path: "/game"}
     ],
     baseIP: 2,
 
@@ -106,7 +110,7 @@ function startGame(elementDOM) {
                 alert("error connect server!"); // error
                 return;
             }
-
+            connectionService.createPingPong();
             let playPage = new PlayPage(world, connectionService, null); // TODO loading
 
             let ifstop = () => {
@@ -129,13 +133,9 @@ function startGame(elementDOM) {
 
                 room = new Room(connectionService, menuPage, id, nickname, (room, height, width) => {
                     area.setSize(height, width);
-                    area.reconfigure();
-                    room.deleteListenRoomInfo();
+                    world.reconfigure();
                     menuPage.stopPage(); // destruct room choose
-
-                    playPage.startPage(room, ifstop);
-
-                    world.update();
+                    playPage.startPage(room);
                 });
 
             });

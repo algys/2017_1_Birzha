@@ -8,17 +8,21 @@ class Connection {
         this.eventMessage = null;
         this.methodMap = {};
 
-        this.timerId = null;
+        this.pinger = null;
         this.destructEvents = [];
     }
 
     createPingPong() {
-        if(!this.timerId)
-            this.timerId = setInterval(() => {}, mainConfiguration.pingPongTime);
+        if(!this.pinger) {
+            this.pinger = setInterval(() => {
+                this.send(ACTION_PING);
+            }, mainConfiguration.pingPongTime);
+        }
     }
 
     removePingPong() {
-
+        if(this.pinger)
+            clearInterval(this.pinger);
     }
 
     addEventListenDestroy(event) {

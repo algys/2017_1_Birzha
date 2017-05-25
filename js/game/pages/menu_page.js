@@ -11,9 +11,13 @@ class MenuPage extends BasePage {
 
         this.buttonMenu = null;
         this.roomBoard = null; /* choose room */
+        this.listeners = [];
     }
 
     startPage(resource) {
+        resource = resource || this.resource;
+        this.resource = resource;
+        this.stoped = false;
         let cellCenter = this.world.area.getExactPosition(this.world.area.fullSize.x / 2, this.world.area.fullSize.y / 2);
         let cenX = cellCenter.x, cenY = cellCenter.y;
         this.world.setOffsetForCenter(cenX, cenY);
@@ -42,12 +46,21 @@ class MenuPage extends BasePage {
     }
 
     startRoomChoose(connection) {
+        connection = connection || this.connection;
+        this.connection = connection;
         this.roomBoard = new PerformBoard(document.getElementById("push-container"),
             this.chooseRoomByClient.bind(this));
 
-        connection.addEventListen(DATATYPE_ROOMMANAGER_UPDATE, (json) => {
-            /* update room status */
-            this.roomBoard.update(json["freerooms"]);
+        this.listeners.push({
+            method: DATATYPE_ROOMMANAGER_UPDATE,
+            id: connection.addEventListen(DATATYPE_ROOMMANAGER_UPDATE, (json) => {
+                /* update room status */
+                if(this.stoped){
+                    this.startPage();
+                    this.startRoomChoose();
+                }
+                this.roomBoard.update(json["freerooms"]);
+            })
         });
     }
 
@@ -57,7 +70,10 @@ class MenuPage extends BasePage {
     }
 
     stopPage() {
+        this.roomBoard.destruct();
         this.world.map.removeChild(this.buttonMenu);
+    //    this.removeAllListeners();
+        this.stoped = true;
         this.world.update();
     }
 
@@ -74,6 +90,14 @@ class MenuPage extends BasePage {
             createjs.Ticker.paused = true;
         }
         this.world.update();
+    }
+
+    removeAllListeners(){
+        if(this.connection)
+            this.listeners.forEach((item)=>{
+                this.connection.deleteListenIndex(item);
+            });
+        this.listeners = [];
     }
 }
 

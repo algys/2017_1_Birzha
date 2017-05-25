@@ -42,10 +42,11 @@ class PerformBoard {
             let nowStatus = statusArray[index];
 
             let count = obj.getAttribute("num");
-            if(count == nowStatus["capacity"])
+            if(count === nowStatus["capacity"])
                 alert("wtf! please sync room server and client");
 
             let getNumField = document.getElementById("cyclic-menu-room-count-" + count);
+            if(getNumField)
             getNumField.innerHTML =
                 mainConfiguration.roomPrefix.replace("?", nowStatus["queue"]) + count;
         });

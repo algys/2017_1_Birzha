@@ -87,16 +87,6 @@ class World {
     }
 
     newImage(file, visible) {
-        /*var box = new createjs.Shape();
-         box.graphics.beginLinearGradientFill(["#ff0000", "#0000ff"], [0, 1], 0, 0, 0, 100);
-         box.graphics.drawCircle(0, 0, 100);
-         box.cache(0, 0, 100, 100);
-
-         let image = new createjs.Bitmap(file);
-         image.filters = [
-         new createjs.AlphaMapFilter(box.cacheCanvas)
-         ];*/
-
         let image = new createjs.Bitmap(file);
 
         this.map.addChild(image);
@@ -125,12 +115,6 @@ class World {
     setZoom(zoom){
         this.map.scaleX = this.map.scaleY = zoom;
         this.area.world.scaleX = this.area.world.scaleY = zoom;
-     //   this.stage.canvas.style.zoom = zoom;
-     //   this.area.stage.canvas.style.zoom = zoom;
-        // this.stage.canvas.height /= zoom;
-        // this.stage.canvas.width /= zoom;
-        // this.area.stage.canvas.height /= zoom;
-        // this.area.stage.canvas.width /= zoom;
         this.stage.update();
         this.area.stage.update();
         this.zoom = zoom;
@@ -146,8 +130,26 @@ class World {
     }
 
     removeTowerFromMap(point){
-        this.arrayMap[point.x].splice(point.y, 1);
+        delete this.arrayMap[point.x][point.y];
+        this.arrayMap[point.x][point.y] = null;
         this.area.markSelectedCell(point.x, point.y, false);
+    }
+
+    clear(){
+        this.map.removeAllChildren();
+        this.area.setSize();
+        this.area.reconfigure();
+        this.update();
+        this.arrayMap = [];
+    }
+
+    reconfigure(){
+        this.area.reconfigure();
+        this.arrayMap = [];
+        for(let i = 0; i < this.area.worldSizeH; i++) {
+            this.arrayMap.push(new Array(this.area.worldSizeW));
+        }
+        this.update();
     }
 }
 

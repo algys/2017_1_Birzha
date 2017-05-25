@@ -20,6 +20,17 @@ class Tree {
         from.nextNode.push(to);
     }
 
+    removeLink(node1, node2){
+        node1.nextNode = node1.nextNode.filter((item)=>{
+            return (item.data.pointX !== node2.data.pointX ||
+                    item.data.pointY !== node2.data.pointY)
+        });
+        node2.nextNode = node2.nextNode.filter((item)=>{
+            return (item.data.pointX !== node1.data.pointX ||
+            item.data.pointY !== node1.data.pointY)
+        });
+    }
+
     removeNode(removedNode){
         removedNode.nextNode.forEach((adjNode,i)=>{
            removedNode.nextNode[i].nextNode = adjNode.nextNode.filter((item)=>{

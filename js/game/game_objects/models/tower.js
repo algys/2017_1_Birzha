@@ -25,7 +25,7 @@ class Tower {
         this.world.update();
     }
 
-    refreshTower(towerType, newUnits, parentNode, client_id) {
+    refreshTower(towerType, newUnits, client_id) {
         this.world.map.removeChild(this.cache.circle);
         this.world.map.removeChild(this.cache.text);
 
@@ -33,8 +33,8 @@ class Tower {
 
         this.typeOfTower = towerType;
         this.units = newUnits;
-        this._parentNode = parentNode || null;
-        this._client_id = client_id   || null;
+        this._parentNode = null;
+        this._client_id = client_id;
     }
 
     get parentNode() {
@@ -145,6 +145,8 @@ class Tower {
         if(this.cache) {
             this.world.map.removeChild(this.cache.circle);
             this.world.map.removeChild(this.cache.text);
+            this.world.area.markSelectedCell(this.pointX, this.pointY, false);
+            this.world.removeTowerFromMap({x: this.pointX, y: this.pointY});
         }
     }
 

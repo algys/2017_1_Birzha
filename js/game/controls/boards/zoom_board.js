@@ -26,6 +26,9 @@ class ZoomBoard{
 
         this.scores = new Map();
     }
+    destruct(){
+        document.body.removeChild(this.menuBoard);
+    }
 }
 
 export default ZoomBoard;
