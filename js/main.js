@@ -1,4 +1,4 @@
-import './conf/conf'
+import './conf'
 
 import { routerInstance } from './router';
 
