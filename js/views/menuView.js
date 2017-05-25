@@ -4,4 +4,6 @@ class MenuView extends BaseView {
 
 }
 
+
+
 export default MenuView;

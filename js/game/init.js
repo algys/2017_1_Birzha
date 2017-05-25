@@ -36,13 +36,13 @@ window.STATUS_PLAYING = "STATUS_PLAYING";
 window.STATUS_READY = "STATUS_READY";
 
 window.conf = {
-    ip: [ {host: "172.16.91.197", port: 8081, path: "/game "},
+    ip: [ {host: "172.16.83.124", port: 8081, path: "/game "},
           {host: "192.168.43.107", port: 8081, path: "/game"},
-          {host: "172.16.84.20", port: 8081, path: "/game"},
+          {host: "172.16.90.25", port: 8081, path: "/game"},
           {host: "172.20.10.4", port: 8081, path: "/game"},
           {host: "localhost", port: 8081, path: "/game"},
           {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
-          {host: "scaptaincap.asuscomm.com", port: 5000, path: "/game"}
+          {host: "172.16.94.65", port: 8081, path: "/game"}
     ],
     baseIP: 2,
 

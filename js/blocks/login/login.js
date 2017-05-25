@@ -16,7 +16,7 @@ class LoginForm {
     }
 
     render () {
-        this._updateHtml()
+        this._updateHtml();
         this._installControls();
     }
 
@@ -45,18 +45,16 @@ class LoginForm {
                 <div class="js-controls">
                 </div>
                 <div class="create_new_account_link" style="margin-top: 10px;" id="RegisterPageId" >
-                    <a href="/logout">
+                    <a href="/register">
                         Create new account
                      </a>
                  </div>
+                 <div id="login_warning" style="color: red;"></div>
                 </form>
             <div class="col-md-3"></div>
         `;
     }
 
-    /**
-     * Вставить управляющие элементы в форму
-     */
     _installControls () {
         let { controls = [] } = this.data;
 

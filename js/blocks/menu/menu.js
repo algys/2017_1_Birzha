@@ -15,7 +15,7 @@ class Menu {
     }
 
     render () {
-        this._updateHtml()
+        this._updateHtml();
         this._installControls();
     }
 
@@ -50,7 +50,6 @@ class Menu {
      * @param {function} callback - коллбек
      */
     on (type, callback) {
-        ;
         this.el.addEventListener(type, callback);
     }
 

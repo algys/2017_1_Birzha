@@ -15,7 +15,7 @@ class RegistrationForm {
     }
 
     render () {
-        this._updateHtml()
+        this._updateHtml();
         this._installControls();
     }
 
@@ -44,6 +44,7 @@ class RegistrationForm {
                 <div id="BackButton" style="padding-top: 20px;">
                     <a href="/login">Back</a>
                 </div>
+                <div style="color: red;" id="registration_warning"></div>
             </form>
         `;
     }

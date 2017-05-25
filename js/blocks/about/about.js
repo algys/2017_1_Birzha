@@ -3,7 +3,7 @@
 import template from '../../templates/template';
 
 class About {
-    constructor(names) {
+    constructor() {
         this.about = template();
     }
 

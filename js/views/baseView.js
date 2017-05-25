@@ -15,7 +15,7 @@ class BaseView {
 
     hide() {
         this.node.hidden = true;
-        //this.node.style.display = "none";
+        // this.node.style.display = "none";
     }
 }
 
