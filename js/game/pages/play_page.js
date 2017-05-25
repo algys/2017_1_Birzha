@@ -193,6 +193,10 @@ class PlayPage extends BasePage {
                     });
                 }
 
+                if (pid === this.user.pid)
+                    if (result === "ACCEPT_WIN" || result === "ACCEPT_LOSE")
+                        this.user.acceptMove(json);
+
                 if (newLinks) {
                     newLinks.forEach((newLink) => {
                         let from = newLink["l"];
@@ -206,10 +210,6 @@ class PlayPage extends BasePage {
                             this.user.createLink(fromTower, toTower);
                     });
                 }
-
-                if (pid === this.user.pid)
-                    if (result === "ACCEPT_WIN" || result === "ACCEPT_LOSE")
-                        this.user.acceptMove(json);
 
                 if (scores) {
                     if (JSON.stringify(lastScores) !== JSON.stringify(scores)) {
