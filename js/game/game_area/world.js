@@ -39,6 +39,7 @@ class World {
             this.arrayMap.push(new Array(this.area.rectSize));
         }
         this.zoom = this.area.zoom;
+        this.elemDOM = elementDOM;
     }
 
     get basicCenter() {

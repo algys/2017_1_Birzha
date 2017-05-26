@@ -56,7 +56,6 @@ class Router {
     }
 
     go(path) {
-        debugger;
         if(path === '')
             path = '/';
 

@@ -38,12 +38,11 @@ class PlayPage extends BasePage {
         return me;
     }
 
-    startPage(room, stopCallback) {
+    startPage(room) {
         this.room = room;
-        this.stopCallback = stopCallback;
         this.enemiesObject = [];
         this.user = null;
-        this.controls = new Controls();
+        this.controls = this.controls || new Controls();
         this.controls.pushNotify({text: "Start Game !"});
         this.controls.menuBoard.addExitListener(this.stopPage.bind(this));
      //   debugger;
@@ -289,14 +288,15 @@ class PlayPage extends BasePage {
         this.world.clear();
         this.controls.destruct();
         this.removeAllListeners();
+        this.user.destruct();
         delete this.user;
         delete this.enemiesObject;
+        this.user = null;
+        this.enemiesObject = [];
+        this.enemiesData = [];
         this.connection.send(ACTION_EXIT_ROOM);
-       // this.world.canvas.requestPointerLock();
-   //     this.stopCallback();
-   //     document.exitPointerLock();
-        document.pointerLockElement();
-        // TODO remove game scene and work with menupage
+
+        document.exitPointerLock();
     }
 }
 

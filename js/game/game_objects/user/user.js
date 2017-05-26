@@ -197,7 +197,6 @@ class User extends GameObject {
     }
 
     acceptMove(json) {
-        debugger;
         let result = json["result"];
         if(result === "ACCEPT_LOSE"){
 
@@ -235,7 +234,8 @@ class User extends GameObject {
     }
 
     destruct(){
-        document.removeEventListener()
+        delete this.userInterface;
+        delete this.userAction;
     }
 }
 

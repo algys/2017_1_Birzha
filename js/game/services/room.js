@@ -18,7 +18,6 @@ class Room {
             let status = json["status"];
             let players = json["players"];
             let pID = json["pid"];
-            debugger;
             this.players = players;
 
             if(status === STATUS_PLAYING) {

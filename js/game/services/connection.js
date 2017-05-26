@@ -65,7 +65,6 @@ class Connection {
     send(action, json) {
         json = json || {};
         json.action = action;
-
         this.socket.sendData(json);
     }
 

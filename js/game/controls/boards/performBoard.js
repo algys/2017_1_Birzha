@@ -15,7 +15,7 @@ class PerformBoard {
             tempDiv.innerHTML = room({
                 count: roomCount,
                 countText: mainConfiguration.roomPrefix + roomCount,
-                roomText: "room " + roomCount
+                roomText: "Game with " + roomCount
             });
 
             let finalDiv = tempDiv.content.firstChild;
@@ -48,7 +48,7 @@ class PerformBoard {
             let getNumField = document.getElementById("cyclic-menu-room-count-" + count);
             if(getNumField)
             getNumField.innerHTML =
-                mainConfiguration.roomPrefix.replace("?", nowStatus["queue"]) + count;
+                mainConfiguration.roomPrefix.replace("?", count - nowStatus["queue"]);
         });
     }
 

@@ -3,7 +3,7 @@ window.mainConfiguration = {
     needAppCache: false,
 
     roomTypes: [2, 3, 4, 5],
-    roomPrefix: "?/", /* ? ~ number of current count */
+    roomPrefix: "Required ? more player", /* ? ~ number of current count */
     pingPongTime: 100000,
 
     pushNotifyDelay: 2000,
@@ -42,7 +42,7 @@ window.conf = {
         {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
         {host: "172.16.94.65", port: 8081, path: "/game"}
     ],
-    baseIP: 3,
+    baseIP: 4,
 
     countUsersInRoom: 2,
 

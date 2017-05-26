@@ -5,12 +5,14 @@ import { startGame, debugGame } from '../game/init'
 class GameView extends BaseView {
     constructor(node) {
         super(node);
+        this.pushContainer = document.getElementById("push-container");
     }
 
     show() {
         super.show();
         let div = document.getElementById("site-interface");
         div.style.visibility = 'hidden';
+        this.pushContainer.style.visibility = 'visible';
 
         if(!mainConfiguration.debugMode)
             startGame(this.node);
@@ -20,6 +22,8 @@ class GameView extends BaseView {
     hide() {
         super.hide();
 
+        debugger;
+        this.pushContainer.style.visibility = 'hidden';
         let div = document.getElementById("site-interface");
         div.style.visibility = "visible";
 

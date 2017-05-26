@@ -84,7 +84,11 @@ class UserInterface {
 
         this.pointerLockStatus = false;
         document.addEventListener("pointerlockchange", () => {
-            this.pointerLockStatus = !this.pointerLockStatus;
+            if(document.pointerLockElement){
+                this.pointerLockStatus = true;
+            } else {
+                this.pointerLockStatus = false;
+            }
         }, false);
 
         this.currentPos = this.startPos;

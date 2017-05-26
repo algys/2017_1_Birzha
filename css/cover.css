@@ -49,7 +49,7 @@ body {
 
 .div-center {
   width: 50%;
-  height: 400px;
+  height: 380px;
 
   z-index: 999;
 
@@ -59,6 +59,8 @@ body {
 
   background: #5bc0de;
   padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
 
   overflow: hidden;
 }
@@ -68,11 +70,27 @@ body {
 
 .cyclic-rooms-buttons {
   height: 50px;
-  padding: 10px;
 }
 
-.cyclic-rooms-buttons > button {
-  margin: 5px;
+.cyclic-menu-room-title{
+  font-size: x-large;
+  margin-top: 5%;
+}
+
+.cyclic-menu-room-count{
+  margin-top: 10px;
+}
+
+#cyclic-rooms-button-quick{
+  height: 100px;
+  width: 98%;
+  margin: 1%;
+  background: #bc1600;
+  font-size: x-large;
+}
+
+#cyclic-rooms-button-quick:hover{
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
 
 .cyclic-menu-room {
@@ -80,8 +98,10 @@ body {
   position: relative;
 
   cursor: pointer;
-  width: 100%;
-  height: 80px;
+  width: 48%;
+  height: 100px;
+  float: left;
+  margin: 1%;
 
   background: #2b542c;
   padding: 10px;
@@ -89,6 +109,7 @@ body {
 
 .cyclic-menu-room:hover {
   background: #5cb85c;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
 
 .cyclic-menu-priority {
