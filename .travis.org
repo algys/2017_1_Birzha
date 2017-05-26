@@ -1,0 +1,22 @@
+language: node_js
+
+sudo: required
+
+node_js:
+  - 7
+
+on:
+    branch: travis.test
+
+services:
+  - docker
+
+install: true
+
+script:
+  - npm install
+  - npm start
+  - webpack
+  - docker login --email=inwady@gmail.com --username=inwady@gmail.com --password=$(echo $API_KEY) registry.heroku.com
+  - docker build -t registry.heroku.com/testappinwady/web .
+  - docker push registry.heroku.com/testappinwady/web

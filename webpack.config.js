@@ -1,10 +1,10 @@
 let path = require('path');
 
 module.exports = {
-    entry: './js/main.js',
+    entry: './public/js/main.js',
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'bin')
+        filename: 'bin/bundle.js',
+        path: path.resolve(__dirname, 'public')
     },
     module: {
         loaders: [{
@@ -13,6 +13,6 @@ module.exports = {
             loader: 'babel-loader'
         }]
     },
-    watch: true,
+    // watch: true,
     cache: false
 };
