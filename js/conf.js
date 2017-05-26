@@ -43,6 +43,7 @@ window.conf = {
         {host: "172.16.94.65", port: ":8081", path: "/game"}
     ],
     prefix : "https://",
+    prefixSocket : "wss://",
     baseIP: 5,
 
     countUsersInRoom: 2,
