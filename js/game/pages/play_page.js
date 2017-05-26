@@ -44,7 +44,10 @@ class PlayPage extends BasePage {
         this.user = null;
         this.controls = this.controls || new Controls();
         this.controls.pushNotify({text: "Start Game !"});
-        this.controls.menuBoard.addExitListener(this.stopPage.bind(this));
+        this.controls.menuBoard.addExitListener(()=>{
+            this.connection.send(ACTION_EXIT_ROOM);
+            this.stopPage();
+        });
      //   debugger;
         let lastScores = null;
 
@@ -294,7 +297,7 @@ class PlayPage extends BasePage {
         this.user = null;
         this.enemiesObject = [];
         this.enemiesData = [];
-        this.connection.send(ACTION_EXIT_ROOM);
+     //   this.connection.send(ACTION_EXIT_ROOM);
 
         document.exitPointerLock();
     }

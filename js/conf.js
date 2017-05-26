@@ -42,7 +42,7 @@ window.conf = {
         {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
         {host: "172.16.94.65", port: 8081, path: "/game"}
     ],
-    baseIP: 5,
+    baseIP: 4,
 
     countUsersInRoom: 2,
 
@@ -60,7 +60,7 @@ window.conf = {
 
 };
 
-window.defaultServer = 'http://' + conf.ip[conf.baseIP].host + ':' + conf.ip[conf.baseIP].port + '/api';
+window.defaultServer = 'https://' + conf.ip[conf.baseIP].host + ':' + conf.ip[conf.baseIP].port + '/api';
 
 window.towerType = {
     DEFAULT: 0,
