@@ -2,15 +2,15 @@
  * Created by algys on 13.04.17.
  */
 
-import Request from './request'
+import Request from "./request";
 
-class Auth{
-    constructor(){
+class Auth {
+    constructor() {
         this.logged = false;
     }
 
-    getMe(success, error){
-        new Request('http://' + conf.ip[conf.baseIP].host + ':' + conf.ip[conf.baseIP].port + '/api')
+    getMe(success, error) {
+        new Request(conf.ip[conf.baseIP].prefix + conf.ip[conf.baseIP].host + conf.ip[conf.baseIP].port + '/api')
             .addResponse(function (response) {
                 console.log(response);
                 if (response.status !== 200) {
@@ -19,7 +19,7 @@ class Auth{
                     error();
                     return;
                 }
-                response.json().then(function(data){
+                response.json().then(function (data) {
                     success(data);
                 });
             }.bind(this))
@@ -32,9 +32,9 @@ class Auth{
             });
     }
 
-    auth(data, success, error){
+    auth(data, success, error) {
         let status = false;
-        new Request('http://'+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
+        new Request(conf.ip[conf.baseIP].prefix + conf.ip[conf.baseIP].host + conf.ip[conf.baseIP].port + '/api')
             .addResponse(function (response) {
                 console.log(response);
                 if (response.status !== 200) {
@@ -59,13 +59,13 @@ class Auth{
     }
 
 
-    checkAuth(success, error){
+    checkAuth(success, error) {
         let status = false;
-        if(this.logged){
+        if (this.logged) {
             success();
             return true;
         }
-        new Request('http://'+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
+        new Request(conf.ip[conf.baseIP].prefix + conf.ip[conf.baseIP].host + conf.ip[conf.baseIP].port + '/api')
             .addResponse(function (response) {
                 console.log(response);
                 if (response.status !== 200) {
@@ -89,9 +89,9 @@ class Auth{
         return status;
     }
 
-    register(data, success, error){
+    register(data, success, error) {
         let status = false;
-        new Request('http://'+conf.ip[conf.baseIP].host + ':' + conf.ip[conf.baseIP].port+'/api')
+        new Request(conf.ip[conf.baseIP].prefix + conf.ip[conf.baseIP].host + conf.ip[conf.baseIP].port + '/api')
             .addResponse(function (response) {
                 console.log(response);
                 if (response.status !== 200) {
@@ -113,8 +113,8 @@ class Auth{
         return status;
     }
 
-    logout(success, error){
-        new Request('http://'+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
+    logout(success, error) {
+        new Request(conf.ip[conf.baseIP].prefix + conf.ip[conf.baseIP].host + conf.ip[conf.baseIP].port + '/api')
             .addResponse(function (response) {
                 if (response.status !== 200) {
                     console.log('Looks like there was a problem. Status Code: ' +

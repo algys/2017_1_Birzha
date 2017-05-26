@@ -297,7 +297,7 @@ class PlayPage extends BasePage {
         this.user = null;
         this.enemiesObject = [];
         this.enemiesData = [];
-     //   this.connection.send(ACTION_EXIT_ROOM);
+        //this.connection.send(ACTION_EXIT_ROOM);
 
         document.exitPointerLock();
     }
