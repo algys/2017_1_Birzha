@@ -1,10 +1,10 @@
 let path = require('path');
 
 module.exports = {
-    entry: './js/main.js',
+    entry: './public/js/main.js',
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'bin')
+        path: path.resolve(__dirname, 'public/bin')
     },
     module: {
         loaders: [{
