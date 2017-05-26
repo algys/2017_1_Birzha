@@ -10,7 +10,7 @@ class Auth{
     }
 
     getMe(success, error){
-        new Request('http://' + conf.ip[conf.baseIP].host + ':' + conf.ip[conf.baseIP].port + '/api')
+        new Request(conf.prefix + conf.ip[conf.baseIP].host + conf.ip[conf.baseIP].port + '/api')
             .addResponse(function (response) {
                 console.log(response);
                 if (response.status !== 200) {
@@ -34,7 +34,7 @@ class Auth{
 
     auth(data, success, error){
         let status = false;
-        new Request('http://'+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
+        new Request(conf.prefix+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
             .addResponse(function (response) {
                 console.log(response);
                 if (response.status !== 200) {
@@ -65,7 +65,7 @@ class Auth{
             success();
             return true;
         }
-        new Request('http://'+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
+        new Request(conf.prefix+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
             .addResponse(function (response) {
                 console.log(response);
                 if (response.status !== 200) {
@@ -91,7 +91,7 @@ class Auth{
 
     register(data, success, error){
         let status = false;
-        new Request('http://'+conf.ip[conf.baseIP].host + ':' + conf.ip[conf.baseIP].port+'/api')
+        new Request(conf.prefix+conf.ip[conf.baseIP].host + conf.ip[conf.baseIP].port+'/api')
             .addResponse(function (response) {
                 console.log(response);
                 if (response.status !== 200) {
@@ -114,7 +114,7 @@ class Auth{
     }
 
     logout(success, error){
-        new Request('http://'+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
+        new Request(conf.prefix+conf.ip[conf.baseIP].host+':'+conf.ip[conf.baseIP].port+'/api')
             .addResponse(function (response) {
                 if (response.status !== 200) {
                     console.log('Looks like there was a problem. Status Code: ' +

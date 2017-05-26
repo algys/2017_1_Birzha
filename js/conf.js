@@ -34,14 +34,15 @@ window.STATUS_PLAYING = "STATUS_PLAYING";
 window.STATUS_READY = "STATUS_READY";
 
 window.conf = {
-    ip: [ {host: "172.16.84.20", port: 8081, path: "/game "},
-        {host: "192.168.43.107", port: 8081, path: "/game"},
-        {host: "172.16.90.25", port: 8081, path: "/game"},
-        {host: "172.20.10.4", port: 8081, path: "/game"},
-        {host: "localhost", port: 8081, path: "/game"},
+    ip: [ {host: "172.16.84.20", port: ":8081", path: "/game "},
+        {host: "192.168.43.107", port: ":8081", path: "/game"},
+        {host: "172.16.90.25", port: ":8081", path: "/game"},
+        {host: "172.20.10.4", port: ":8081", path: "/game"},
+        {host: "localhost", port: ":8081", path: "/game"},
         {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
-        {host: "172.16.94.65", port: 8081, path: "/game"}
+        {host: "172.16.94.65", port: ":8081", path: "/game"}
     ],
+    prefix : "https://",
     baseIP: 5,
 
     countUsersInRoom: 2,
@@ -60,7 +61,7 @@ window.conf = {
 
 };
 
-window.defaultServer = 'http://' + conf.ip[conf.baseIP].host + ':' + conf.ip[conf.baseIP].port + '/api';
+window.defaultServer = conf.prefix + conf.ip[conf.baseIP].host + conf.ip[conf.baseIP].port + '/api';
 
 window.towerType = {
     DEFAULT: 0,
