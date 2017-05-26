@@ -1,10 +1,10 @@
-import roombase from '../../../templates/roombase';
-import room from '../../../templates/room';
+import roombase from "../../../templates/roombase";
+import room from "../../../templates/room";
 
 class PerformBoard {
     constructor(root, callback) {
         root.innerHTML = roombase({
-            quickStart: "Quick start"
+            quickStart: mainConfiguration.quickStart
         });
         this.root = root;
 
@@ -14,8 +14,8 @@ class PerformBoard {
             let tempDiv = document.createElement('template');
             tempDiv.innerHTML = room({
                 count: roomCount,
-                countText: mainConfiguration.roomPrefix + roomCount,
-                roomText: "Game with " + roomCount
+                countText: mainConfiguration.roomPrefixEmpty,
+                roomText: mainConfiguration.roomDeclaration.replace("?", roomCount)
             });
 
             let finalDiv = tempDiv.content.firstChild;
@@ -28,7 +28,9 @@ class PerformBoard {
         });
 
         this.callback = callback;
-        document.getElementById("cyclic-rooms-button-quick").onclick = () => { this.callback(null); };
+        document.getElementById("cyclic-rooms-button-quick").onclick = () => {
+            this.callback(null);
+        };
     }
 
     wrapperClick(event) {
@@ -42,13 +44,19 @@ class PerformBoard {
             let nowStatus = statusArray[index];
 
             let count = obj.getAttribute("num");
-            if(count === nowStatus["capacity"])
+            if (count === nowStatus["capacity"])
                 alert("wtf! please sync room server and client");
 
             let getNumField = document.getElementById("cyclic-menu-room-count-" + count);
-            if(getNumField)
-            getNumField.innerHTML =
-                mainConfiguration.roomPrefix.replace("?", count - nowStatus["queue"]);
+            if (getNumField) {
+                if (nowStatus["queue"] === 0) {
+                    getNumField.innerHTML = mainConfiguration.roomPrefixEmpty
+                }
+                else {
+                    getNumField.innerHTML =
+                        mainConfiguration.roomPrefix.replace("?", count - nowStatus["queue"]);
+                }
+            }
         });
     }
 

@@ -4,6 +4,10 @@ window.mainConfiguration = {
 
     roomTypes: [2, 3, 4, 5],
     roomPrefix: "Required ? more player", /* ? ~ number of current count */
+    roomPrefixEmpty: "Room is empty",
+    roomDeclaration: "Fight vs ? players",
+    quickStart: "Choose best room for me!",
+
     pingPongTime: 100000,
 
     pushNotifyDelay: 2000,
@@ -34,17 +38,16 @@ window.STATUS_PLAYING = "STATUS_PLAYING";
 window.STATUS_READY = "STATUS_READY";
 
 window.conf = {
-    ip: [ {host: "172.16.84.20", port: ":8081", path: "/game "},
-        {host: "192.168.43.107", port: ":8081", path: "/game"},
-        {host: "172.16.90.25", port: ":8081", path: "/game"},
-        {host: "172.20.10.4", port: ":8081", path: "/game"},
-        {host: "localhost", port: ":8081", path: "/game"},
-        {host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
-        {host: "172.16.94.65", port: ":8081", path: "/game"}
+    ip: [
+        {prefixSocket : "ws://", prefix: "http://", host: "172.16.84.20", port: ":8081", path: "/game "},
+        {prefixSocket : "ws://", prefix: "http://", host: "192.168.1.102", port: ":8081", path: "/game"},
+        {prefixSocket : "ws://", prefix: "http://", host: "172.16.90.25", port: ":8081", path: "/game"},
+        {prefixSocket : "ws://", prefix: "http://", host: "172.20.10.4", port: ":8081", path: "/game"},
+        {prefixSocket : "ws://", prefix: "http://", host: "localhost", port: ":8081", path: "/game"},
+        {prefixSocket : "wss://", prefix: "https://", host: "cyclic-server.herokuapp.com", port: "", path: "/game"},
+        {prefixSocket : "ws://", prefix: "http://", host: "172.16.94.65", port: ":8081", path: "/game"}
     ],
-    prefix : "https://",
-    prefixSocket : "wss://",
-    baseIP: 5,
+    baseIP: 1,
 
     countUsersInRoom: 2,
 
@@ -62,7 +65,7 @@ window.conf = {
 
 };
 
-window.defaultServer = conf.prefix + conf.ip[conf.baseIP].host + conf.ip[conf.baseIP].port + '/api';
+window.defaultServer = conf.ip[conf.baseIP].prefix + conf.ip[conf.baseIP].host + conf.ip[conf.baseIP].port + '/api';
 
 window.towerType = {
     DEFAULT: 0,

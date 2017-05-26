@@ -73,7 +73,7 @@ class Connection {
     }
 
     static parseHost(ip) {
-        return conf.prefixSocket + ip.host + ip.port + ip.path;
+        return conf.ip[conf.baseIP].prefixSocket + ip.host + ip.port + ip.path;
     }
 }
 
